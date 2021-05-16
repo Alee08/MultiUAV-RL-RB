@@ -31,14 +31,14 @@ else:
 
 #CONFIGURATION------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # TRAINING PARAMETERS
-EPISODES = 20000 # epochs
+EPISODES = 1000 # epochs
 REDUCE_ITERATION_PER_EPISODE = False
 ITERATIONS_PER_EPISODE = 160
 NUMBER_ITER = ITERATIONS_PER_EPISODE
 NO_INTERFERENCE_REWARD = False
 EPISODES_BP = 0
 
-N_MISSION = 10
+N_MISSION = 3
 hosp_pos= [[(6, 2), (4, 6)], [(7,5), (2,4)], [(5, 9), (3, 2)], [(9,3),(0,12)], [(12, 18),(0,19)] , [(6,15),(12,1)] , [(18, 1), (15, 4)], [(17, 6), (15, 2)] , [(17, 17), (17, 12)], [(15, 18), (18, 10)]] #Posizione ospedali
 randomm = False #Posizione randomica degli ospedali
 Colorss = [['None', 'gold', 'orange', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'],['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'],['None', 'gold', 'orange'],['None', 'gold', 'orange']]
@@ -57,7 +57,7 @@ UAVS_POS = UAVS_POS_
 
 assert len(hosp_pos)==len(UAVS_POS), "The number of missions must be the same as the number of UAV_POS " #Ricordare di cambiare il numero di missioni in Main.py
 
-SHOW_PLOT = False #Mostra i goal temporali da raggiungere per ogni missione
+SHOW_PLOT = True #Mostra i goal temporali da raggiungere per ogni missione
 #ok = env.o + 1
 
 
@@ -98,7 +98,7 @@ Q_LEARNING = True
 SARSA = False
 SARSA_lambda = False
 
-HOSP_SCENARIO = True
+HOSP_SCENARIO = False
 
 P_PURPLE = "#cf03fc"
 P_GOLD = '#FFD700'

@@ -19,7 +19,7 @@ else:
 
 policy_n = []
 j = 0
-N_MISSION = 10
+N_MISSION = 3
 
 
 

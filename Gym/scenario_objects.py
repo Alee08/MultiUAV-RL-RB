@@ -1235,12 +1235,13 @@ if __name__ == '__main__':
     #if HOSP_SCENARIO == False:
     saver.users_clusters(users_xyz, initial_centroids, initial_clusters_radiuses, initial_clusterer, initial_usr_clusters)
 
-    print("PUNTI:")
-    for p in hosp_points:
-        print(p._x_coord, p._y_coord, p.receiver, get_color_name(p._priority))
-    print("CELLE:")
-    for c in hosp_cells:
-        print(c._x_coord, c._y_coord, c.receiver, get_color_name(c._priority))
+    if HOSP_SCENARIO == True:
+        print("PUNTI:")
+        for p in hosp_points:
+            print(p._x_coord, p._y_coord, p.receiver, get_color_name(p._priority))
+        print("CELLE:")
+        for c in hosp_cells:
+            print(c._x_coord, c._y_coord, c.receiver, get_color_name(c._priority))
 
     # _______________________________________________________________________________________________________________________
 

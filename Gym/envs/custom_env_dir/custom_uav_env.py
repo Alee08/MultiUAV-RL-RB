@@ -46,9 +46,11 @@ class UAVEnv(gym.Env):
                 self.come_home_set = ACTION_SPACE_3D_COME_HOME
         self.action_space = spaces.Discrete(len(self.q_table_action_set))
         self.nb_actions = self.action_space.n
-        #self.observation_space = spaces.Box(low=0, high=max(CELLS_ROWS, CELLS_COLS, FULL_BATTERY_LEVEL), shape=(CELLS_ROWS, CELLS_COLS, ITERATIONS_PER_EPISODE), dtype=np.float32) if DIMENSION_2D==False else spaces.Box(low=0, high=max(CELLS_ROWS, CELLS_COLS), shape=(CELLS_ROWS, CELLS_COLS), dtype=np.float32)
 
-        self.observation_space = gym.spaces.Tuple(tuple(map(self.get_agent_dict_space, range(N_UAVS))))
+        if HOSP_SCENARIO == False:
+            self.observation_space = spaces.Box(low=0, high=max(CELLS_ROWS, CELLS_COLS, FULL_BATTERY_LEVEL), shape=(CELLS_ROWS, CELLS_COLS, ITERATIONS_PER_EPISODE), dtype=np.float32) if DIMENSION_2D==False else spaces.Box(low=0, high=max(CELLS_ROWS, CELLS_COLS), shape=(CELLS_ROWS, CELLS_COLS), dtype=np.float32)
+        else:
+            self.observation_space = gym.spaces.Tuple(tuple(map(self.get_agent_dict_space, range(N_UAVS))))
 
         self.state = None
         self.obs_points = load.obs_points
@@ -221,8 +223,8 @@ class UAVEnv(gym.Env):
         #print(done)
 
         if (done):
-            print("weeeeeeeeee")
-            breakpoint()
+            #print("weeeeeeeeee")
+            #breakpoint()
 
             if (info=="IS CRASHED"):
                 reward = 0.0
@@ -644,21 +646,20 @@ class UAVEnv(gym.Env):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
+        if (agent._battery_level == 0) or HOSP_SCENARIO == True:
+            agent._battery_level = FULL_BATTERY_LEVEL
+            arise_pos_idx = np.random.choice(range(N_UAVS))
+            arise_pos = self.initial_uavs_pos[arise_pos_idx]
+            print("UAV_ID:", j, "START_POS:", arise_pos)
 
-        '''if (agent._battery_level == 0):
-            agent._battery_level = FULL_BATTERY_LEVEL'''
-        arise_pos_idx = np.random.choice(range(N_UAVS))
-        arise_pos = self.initial_uavs_pos[arise_pos_idx]
-        print("UAV_ID:", j, "START_POS:", arise_pos)
+            #print(arise_pos, "arise_posarise_posarise_pos")
 
-        #print(arise_pos, "arise_posarise_posarise_pos")
+            agent._x_coord = arise_pos[0]#+0.5
+            agent._y_coord = arise_pos[1]#+0.5
+            agent._z_coord = arise_pos[2]#+0.5
 
-        agent._x_coord = arise_pos[0]#+0.5
-        agent._y_coord = arise_pos[1]#+0.5
-        agent._z_coord = arise_pos[2]#+0.5
-
-        agent._charging = False
-        agent._coming_home = False
+            agent._charging = False
+            agent._coming_home = False
 
 
     def update_users_requests(self, users):

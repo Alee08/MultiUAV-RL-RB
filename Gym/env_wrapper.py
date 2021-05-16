@@ -738,9 +738,11 @@ if (HOSP_SCENARIO==True):
 ok = 0
 print("\nSTART TRAINING . . .\n")
 for episode in range(1, EPISODES+1):
-    reset_priority()
-    env.reset()
-    reset_uavs(agents[0])
+
+    if HOSP_SCENARIO == True:
+        reset_priority()
+        env.reset()
+        reset_uavs(agents[0])
 
     '''if (STATIC_REQUEST==False):
         if (episode%MOVE_USERS_EACH_N_EPOCHS==0):
@@ -886,14 +888,15 @@ for episode in range(1, EPISODES+1):
                 action = ACTION_SPACE_STANDARD_BEHAVIOUR.index(action)
 
             if ( (ANALYZED_CASE == 1) or (ANALYZED_CASE == 3) ): # --> UNLIMITED BATTERY
-                '''
-                obs = tuple([round(ob, 1) for ob in obs])
-                obs_ = tuple([round(ob, 1) for ob in obs_])
-                '''
+
                 if (HOSP_SCENARIO == False):
+
                     obs = tuple([round(ob, 1) for ob in obs])
-                    #obs_ = tuple([round(ob, 1) for ob in obs_[0][0]])
-                    obs_ = tuple([round(ob, 1) for ob in (obs_[0][0]['x'], obs_[0][0]['y'])])
+                    obs_ = tuple([round(ob, 1) for ob in obs_])
+
+                    #obs = tuple([round(ob, 1) for ob in obs])
+                    #obs_ = tuple([round(ob, 1) for ob in obs_[0][0]]) #CASO MARCO
+                    #obs_ = tuple([round(ob, 1) for ob in (obs_[0][0]['x'], obs_[0][0]['y'])]) #CASO MARCO
                 else:
                     #print("OBSSSSSSSSSSSSSSSSSSSSSSSSSS", obs)
 
@@ -909,7 +912,7 @@ for episode in range(1, EPISODES+1):
             '''if not explored_states_q_tables[UAV][obs_][action]:
                 explored_states_q_tables[UAV][obs_][action] = True'''
             #print("1111111111111111111111111111111111", obs, obs_)
-            obs_recorder[UAV][i] = obs_
+            obs_recorder[UAV][i] = obs_ #HOSP_SCENARIO == FALSE: obs_recorder[UAV][i] = obs
             #print("1 - obs_recorder[UAV]", obs_recorder[UAV])
             uavs_episode_reward[UAV] += reward
 
@@ -1039,8 +1042,8 @@ for episode in range(1, EPISODES+1):
 
                 #current_UAV_bandwidth[UAV] += UAV_BANDWIDTH - agents[UAV]._bandwidth
                 #current_requested_bandwidth[UAV] += env.current_requested_bandwidth
-
-            #reset_uavs(agents[UAV])
+            if HOSP_SCENARIO == False:
+                reset_uavs(agents[UAV])
             if done:
                 #print("uavs_episode_reward[UAV]", uavs_episode_reward[UAV], reward)
 

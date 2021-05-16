@@ -201,10 +201,10 @@ class Plot:
         GOLD_circle = mlines.Line2D([], [], color=GOLD, marker='o', markersize=15, label="Users")
 
         # Colored canvas for the priorities (used only in 'hospitals scenario'):
-        HOSP_1_CIRCLE = mlines.Line2D([], [], color=P_GOLD, marker='o', markersize=15, label="Priority 1")
+        '''HOSP_1_CIRCLE = mlines.Line2D([], [], color=P_GOLD, marker='o', markersize=15, label="Priority 1")
         HOSP_2_CIRCLE = mlines.Line2D([], [], color=PURPLE, marker='o', markersize=15, label="Priority 2")
         HOSP_3_CIRCLE = mlines.Line2D([], [], color=P_ORANGE, marker='o', markersize=15, label="Priority 3")
-        HOSP_4_CIRCLE = mlines.Line2D([], [], color=P_BROWN, marker='o', markersize=15, label="Priority 4")
+        HOSP_4_CIRCLE = mlines.Line2D([], [], color=P_BROWN, marker='o', markersize=15, label="Priority 4")'''
         HOSP_CIRCLES = [mlines.Line2D([], [], color=HOSP_PRIORITIES[i], marker='o', markersize=15, label="Goal 2 " ) if i % 2 == 0 else mlines.Line2D([], [], color=HOSP_PRIORITIES[i], marker='o', markersize=15, label="Goal 1 " )
             for i in range(1, N_HOSP + 1)]
             #mlines.Line2D([], [], color=HOSP_PRIORITIES[i], marker='o', markersize=15, label="Priority " + str(i + 1))
