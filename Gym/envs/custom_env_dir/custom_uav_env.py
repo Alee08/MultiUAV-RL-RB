@@ -218,6 +218,7 @@ class UAVEnv(gym.Env):
 
             #self.ciao = False
 
+
         done, info = self.is_terminal_state(agent)
         #Non viene mai usato questo
         #print(done)
@@ -645,8 +646,9 @@ class UAVEnv(gym.Env):
         # Replace the 'agent' on an initial position randomly selected among the ones available for UAVs (it happens only when a crash occurs). #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+        #Da decidere se fare due funzioni separate per batteria e reset della posizione ad ogni episodio
 
-        if (agent._battery_level == 0) or HOSP_SCENARIO == True:
+        '''if (agent._battery_level == 0) or HOSP_SCENARIO == True:
             agent._battery_level = FULL_BATTERY_LEVEL
             arise_pos_idx = np.random.choice(range(N_UAVS))
             arise_pos = self.initial_uavs_pos[arise_pos_idx]
@@ -659,7 +661,22 @@ class UAVEnv(gym.Env):
             agent._z_coord = arise_pos[2]#+0.5
 
             agent._charging = False
-            agent._coming_home = False
+            agent._coming_home = False'''
+
+        agent._battery_level = FULL_BATTERY_LEVEL
+        arise_pos_idx = np.random.choice(range(N_UAVS))
+        arise_pos = self.initial_uavs_pos[arise_pos_idx]
+        print("UAV_ID:", j, "START_POS:", arise_pos)
+
+        # print(arise_pos, "arise_posarise_posarise_pos")
+
+        agent._x_coord = arise_pos[0]  # +0.5
+        agent._y_coord = arise_pos[1]  # +0.5
+        agent._z_coord = arise_pos[2]  # +0.5
+
+        agent._charging = False
+        agent._coming_home = False
+
 
 
     def update_users_requests(self, users):

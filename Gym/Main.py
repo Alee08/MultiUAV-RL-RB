@@ -1,5 +1,4 @@
 import os
-import csv
 from subprocess import Popen
 
 with open("iter.py", "w") as text_file:

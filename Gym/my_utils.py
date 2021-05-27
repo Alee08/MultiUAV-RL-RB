@@ -33,7 +33,7 @@ else:
 # TRAINING PARAMETERS
 EPISODES = 1000 # epochs
 REDUCE_ITERATION_PER_EPISODE = False
-ITERATIONS_PER_EPISODE = 160
+ITERATIONS_PER_EPISODE = 80
 NUMBER_ITER = ITERATIONS_PER_EPISODE
 NO_INTERFERENCE_REWARD = False
 EPISODES_BP = 0
@@ -43,7 +43,7 @@ hosp_pos= [[(6, 2), (4, 6)], [(7,5), (2,4)], [(5, 9), (3, 2)], [(9,3),(0,12)], [
 randomm = False #Posizione randomica degli ospedali
 Colorss = [['None', 'gold', 'orange', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'],['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'],['None', 'gold', 'orange'],['None', 'gold', 'orange']]
 #UAVS_POS = [[(0, 5, 0)], [(3, 9, 0)], [(9, 1, 0)]] # caso tesi
-UAVS_POS = [[(0, 5, 0)], [(3, 9, 0)], [(9, 1, 0)], [(1, 11, 0)], [(15, 15, 0)], [(14, 5, 0)] , [(4, 18, 0)], [(9, 19, 0)], [(19, 19, 0)], [(19, 14, 0)]]
+UAVS_POS = [[(9, 0, 0)], [(3, 9, 0)], [(9, 1, 0)], [(1, 11, 0)], [(15, 15, 0)], [(14, 5, 0)] , [(4, 18, 0)], [(9, 19, 0)], [(19, 19, 0)], [(19, 14, 0)]]
 UAV_HEIGHT_Z = 0
 nb_colors = 2
 
@@ -98,7 +98,7 @@ Q_LEARNING = True
 SARSA = False
 SARSA_lambda = False
 
-HOSP_SCENARIO = False
+HOSP_SCENARIO = True
 
 P_PURPLE = "#cf03fc"
 P_GOLD = '#FFD700'
@@ -334,8 +334,8 @@ NORMALIZATION_FACTOR_WAITING_TIME_FOR_SERVIE = 120
 		x_max = y_max
 	return x_max, y_max'''
 
-AREA_WIDTH = 20
-AREA_HEIGHT = 20
+AREA_WIDTH = 10
+AREA_HEIGHT = 10
 LOWER_BOUNDS = 0
 CELL_RESOLUTION_PER_ROW = 1
 CELL_RESOLUTION_PER_COL = 1
@@ -398,10 +398,16 @@ UAV_XY_STEP = 1
 UAV_Z_STEP = 3
 
 # OBSTACLES PARAMETERS:
-MIN_OBS_PER_AREA = 0.5
-MAX_OBS_PER_AREA = 1
-MIN_OBS_HEIGHT = 3
-MAX_OBS_HEIGHT = MAXIMUM_AREA_HEIGHT
+if HOSP_SCENARIO == True:
+	MIN_OBS_PER_AREA = 0.5
+	MAX_OBS_PER_AREA = 1
+	MIN_OBS_HEIGHT = 3
+	MAX_OBS_HEIGHT = MAXIMUM_AREA_HEIGHT
+else:
+	MIN_OBS_PER_AREA = 0.05
+	MAX_OBS_PER_AREA = 0.15
+	MIN_OBS_HEIGHT = 3
+	MAX_OBS_HEIGHT = MAXIMUM_AREA_HEIGHT
 
 # CHARGING STATION PARAMETERS:
 CS_HEIGHT = MIN_UAV_HEIGHT
@@ -675,7 +681,7 @@ dir_mission = "/Mission_"+str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 def generate_single_trajectory(csv_filename, csv_dir, data):
 
     out = open('./' + csv_dir + '/' + csv_filename, 'a')
-    print(data)
+    #print(data, "data")
     for row in data:
         for column in row:
             out.write('%d, ' % column)

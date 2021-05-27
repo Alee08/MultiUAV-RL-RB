@@ -93,8 +93,7 @@ class RewardDFA(DFA, RewardAutomaton):
         #DFA.to_dot(self, "home/alee8/OK", str(dfa))
         filepath = "./my_awesome_automaton"
         ok = dfa.minimize().trim().to_dot(filepath)
-        print("dfa._states", dfa._states, "\ndfa._alphabet", dfa._alphabet, "\ndfa._initial_state", dfa._initial_state, "\ndfa._accepting_states", dfa._accepting_states,
-              "\ndfa._transition_function", dfa._transition_function)
+        #print("dfa._states", dfa._states, "\ndfa._alphabet", dfa._alphabet, "\ndfa._initial_state", dfa._initial_state, "\ndfa._accepting_states", dfa._accepting_states, "\ndfa._transition_function", dfa._transition_function)
 
     def _find_sink_state(self) -> State:
         for s, delta in self.transition_function.items():

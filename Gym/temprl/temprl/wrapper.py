@@ -34,7 +34,7 @@ from gym.spaces import Tuple as GymTuple
 from pythomata.base import State, Symbol
 from pythomata.dfa import DFA
 from my_utils import *
-import graphviz
+#import graphviz
 from temprl.temprl.automata import RewardAutomatonSimulator, RewardDFA, TemporalLogicFormula
 #from envs.custom_env_dir.custom_uav_env import UAVEnv
 #from env_wrapper import *
