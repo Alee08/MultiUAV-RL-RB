@@ -2,12 +2,13 @@
 ### Table of Contents
 
 - [Description](#description)
-- [Install & Run](#Install-&-Run)
+- [Install & Run](#install-&-Run)
 - [Outputs](#outputs)  
 - [References](#references)
 - [License](#license)
 - [Author Info](#author-info)
 
+---
 
 ## Description
 MultiUAV-RL-RB is a fremework developed for the final thesis project in Engineering in Computer Science at Sapienza University of Rome, supervised by Prof. Luca Iocchi. The name of the master's thesis is: [Multi-UAV reinforcement learning with temporal and priority goals](https://alee08.github.io/Multi-UAV_RL_RB).
@@ -56,7 +57,7 @@ The goal of MultiUAV-RL-RB is to find an optimal policy for each agent, reducing
 - pythomata (0.2.0)
 - graphviz (0.16)
 
-
+---
 
 ## Install & Run
 It is possible to install the framework in two different ways, via [Docker](Docker) or via [Pip](Pip)
@@ -91,6 +92,8 @@ Now run:
 ```console
 $ Python3 Main.py 
 ```
+
+---
 
 ## Outputs
 
@@ -143,6 +146,9 @@ The `Z-axis` in the example is set to `0` because it is not considered.
 |2  |1  |10 |4  |0  |
 |2  |2  |10 |5  |0  |
 |...  |...  |...  |...  |...  |
+
+---
+
 ## References
 
 ...
