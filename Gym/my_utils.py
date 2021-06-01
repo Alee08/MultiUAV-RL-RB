@@ -57,7 +57,7 @@ UAVS_POS = UAVS_POS_
 
 assert len(hosp_pos)==len(UAVS_POS), "The number of missions must be the same as the number of UAV_POS " #Ricordare di cambiare il numero di missioni in Main.py
 
-SHOW_PLOT = True #Mostra i goal temporali da raggiungere per ogni missione
+SHOW_PLOT = False #Mostra i goal temporali da raggiungere per ogni missione
 #ok = env.o + 1
 
 
@@ -73,7 +73,6 @@ def UAV_i(UAVS_POS, hosp_pos, Colors, j):
 def idx_pos():
 	idx = o
 	return idx
-
 '''ok = []
 for i in range(10):
 	for j in range(10):
@@ -689,8 +688,9 @@ def generate_single_trajectory(csv_filename, csv_dir, data):
     out.close()
 
 num_trajectories = 1
+
 def generate_trajectories(name, data):
-    csv_dir = str(CSV_DIRECTORY_NAME+"/ID_"+ str(j) + '_' +str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))\
+    csv_dir = str(CSV_DIRECTORY_NAME+"/MissionStart"+ '_' +str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))\
          .replace("-", "_")\
         .replace(":", "_")\
         .replace(".", "")\
