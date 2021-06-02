@@ -31,10 +31,7 @@ The goal of MultiUAV-RL-RB is to find an optimal policy for each agent, reducing
   </tbody>
 </table>
 
-
----
-
-###Settings
+### Settings
 
 - Start position for each agent
 - Priority goal for each agent
