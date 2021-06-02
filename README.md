@@ -15,23 +15,25 @@ MultiUAV-RL-RB is a fremework developed for the final thesis project in Engineer
 
 The goal of MultiUAV-RL-RB is to find an optimal policy for each agent, reducing interference between agent policies. Agents must respect the mission priority associated with each goal and reach the goals in the correct order.
 ###Hosp Scenario
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: center"><img src="https://alee08.github.io/_pages/Multi_UAV/ex3.gif" alt="" /></th>
-      <th style="text-align: center"><img src="https://alee08.github.io/_pages/Multi_UAV/ex4.gif" alt="" /></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">Experiment 3. Without priority</td>
-      <td style="text-align: center">Experiment 4. With priority</td>
-    </tr>
-  </tbody>
-</table>
-
+<div>
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: center"><img src="https://alee08.github.io/_pages/Multi_UAV/ex3.gif" alt="" /></th>
+          <th style="text-align: center"><img src="https://alee08.github.io/_pages/Multi_UAV/ex4.gif" alt="" /></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: center">Experiment 3. Without priority</td>
+          <td style="text-align: center">Experiment 4. With priority</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
 
 ###Settings
+
 - Start position for each agent
 - Priority goal for each agent
 - LTLf / LDLf formula for each agent
