@@ -30,6 +30,7 @@ The goal of MultiUAV-RL-RB is to find an optimal policy for each agent, reducing
   </tbody>
 </table>
 
+
 ###Settings
 - Start position for each agent
 - Priority goal for each agent
@@ -127,7 +128,7 @@ Gym
 The `BestPolicy.csv` contains the mission of each UAV. 
 
 Each UAV has an `ID`. The UAV with the lowest ID has the highest priority. 
-`T` stands for time and indicates at which iteration the UAV is in the cell with coordinates `x` and `y`. 
+`T` stands for time and indicates at which iteration the UAV is in the cell with coordinates `x`, `y` and `z`. 
 
 The `Z-axis` in the example is set to `0` because it is not considered.
 
