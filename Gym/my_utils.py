@@ -31,7 +31,7 @@ else:
 
 #CONFIGURATION------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # TRAINING PARAMETERS
-EPISODES = 1000 # epochs
+EPISODES = 8000 # epochs
 REDUCE_ITERATION_PER_EPISODE = False
 ITERATIONS_PER_EPISODE = 80
 NUMBER_ITER = ITERATIONS_PER_EPISODE
@@ -42,8 +42,8 @@ N_MISSION = 3
 hosp_pos= [[(6, 2), (4, 6)], [(7,5), (2,4)], [(5, 9), (3, 2)], [(9,3),(0,12)], [(12, 18),(0,19)] , [(6,15),(12,1)] , [(18, 1), (15, 4)], [(17, 6), (15, 2)] , [(17, 17), (17, 12)], [(15, 18), (18, 10)]] #Posizione ospedali
 randomm = False #Posizione randomica degli ospedali
 Colorss = [['None', 'gold', 'orange', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'],['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'],['None', 'gold', 'orange'],['None', 'gold', 'orange']]
-#UAVS_POS = [[(0, 5, 0)], [(3, 9, 0)], [(9, 1, 0)]] # caso tesi
-UAVS_POS = [[(9, 0, 0)], [(3, 9, 0)], [(9, 1, 0)], [(1, 11, 0)], [(15, 15, 0)], [(14, 5, 0)] , [(4, 18, 0)], [(9, 19, 0)], [(19, 19, 0)], [(19, 14, 0)]]
+UAVS_POS = [[(0, 5, 0)], [(3, 9, 0)], [(9, 1, 0)]] # caso tesi
+#UAVS_POS = [[(9, 0, 0)], [(3, 9, 0)], [(9, 1, 0)], [(1, 11, 0)], [(15, 15, 0)], [(14, 5, 0)] , [(4, 18, 0)], [(9, 19, 0)], [(19, 19, 0)], [(19, 14, 0)]]
 UAV_HEIGHT_Z = 0
 nb_colors = 2
 

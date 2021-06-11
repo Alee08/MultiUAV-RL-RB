@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a3da1a9f-6154-40b3-a7b5-bc7a950b4aa4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Best_policy/Best_policys.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Best_policy/Best_policys.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Best_policy/best_policy_obs.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Best_policy/best_policy_obs.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Best_policy/policy_per_plot_.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Best_policy/policy_per_plot_.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Best_policy/trajectory.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Best_policy/trajectory.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/UAV1/best_policy.npy" beforeDir="false" afterPath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/UAV1/best_policy.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/animation_ep20000.gif" beforeDir="false" afterPath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/animation_ep20000.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/env_and_train_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/env_and_train_info.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flights_trajectories/ID_1_2021_06_01--21_58_23/UAV-0_BestPolicy.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flights_trajectories/ID_1_2021_06_01--21_58_30/UAV-1_BestPolicy.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flights_trajectories/ID_1_2021_06_01--21_58_42/UAV-2_BestPolicy.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/initial_users/initial_centroids.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/initial_users/initial_clusterer.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/initial_users/initial_clusters_radiuses.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/initial_users/initial_users.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/initial_users/initial_users_clusters.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/cells_matrix.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/cs_cells.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/cs_points.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/eNB_point.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/enb_cells.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/hosp_cells.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/hosp_points.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/obs_cells.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/obs_points.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/points_matrix.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/priorities_cells.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_data/priorities_points.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_status/cells_status_matrix.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_status/perceived_status_matrix.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_status/points_status_matrix.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_awesome_automaton" beforeDir="false" afterPath="$PROJECT_DIR$/my_awesome_automaton" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_awesome_automaton.svg" beforeDir="false" afterPath="$PROJECT_DIR$/my_awesome_automaton.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_utils.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1tnyVRLUfhzmsm8EBNNEg5DUY6f" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a3da1a9f-6154-40b3-a7b5-bc7a950b4aa4" name="Default Changelist" comment="" />
+      <created>1623419172593</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1623419172593</updated>
+      <workItem from="1623419174277" duration="487000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
