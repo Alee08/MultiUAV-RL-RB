@@ -14,6 +14,7 @@
 MultiUAV-RL-RB is a fremework developed for the final thesis project in Engineering in Computer Science at Sapienza University of Rome, supervised by Prof. Luca Iocchi. The name of the master's thesis is: [Multi-UAV reinforcement learning with temporal and priority goals](https://alee08.github.io/Multi-UAV_RL_RB).
 
 The goal of MultiUAV-RL-RB is to find an optimal policy for each agent, reducing interference between agent policies. Agents must respect the mission priority associated with each goal and reach the goals in the correct order.
+
 ###Hosp Scenario
 
 <table>
@@ -89,7 +90,8 @@ $ pip install -e .
 ```
 Now all needed dependencies are installed.
 
-####Run
+#### Run
+
 Now run:
 ```console
 $ Python3 Main.py 
