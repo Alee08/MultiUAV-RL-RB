@@ -15,7 +15,7 @@ MultiUAV-RL-RB is a fremework developed for the final thesis project in Engineer
 
 The goal of MultiUAV-RL-RB is to find an optimal policy for each agent, reducing interference between agent policies. Agents must respect the mission priority associated with each goal and reach the goals in the correct order.
 
-###Hosp Scenario
+### Hosp Scenario
 
 <table>
   <thead>
