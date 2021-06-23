@@ -100,7 +100,7 @@ class Plot:
         # the states are extracted from 'matrix_area'.                      #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-        status_matrix = [[matrix_area[j][i]._status for j in range(area_width)] for i in range(area_height)]
+        status_matrix = [[matrix_area[i][j]._status for j in range(area_width)] for i in range(area_height)]
 
         return status_matrix
 
@@ -275,7 +275,7 @@ class Plot:
                 for hosp_c in hosp_cells:
                     '''ax.add_artist(plt.Circle((hosp_c._y_coord, hosp_c._x_coord, hosp_c._z_coord), 0.35,
                                              color=get_color_name(hosp_c._priority)))''' #senza get_color_name
-                    ax.add_artist(plt.Circle((hosp_c._y_coord, hosp_c._x_coord, hosp_c._z_coord), 0.35,
+                    ax.add_artist(plt.Circle((hosp_c._x_coord, hosp_c._y_coord, hosp_c._z_coord), 0.35,
                                              color=hosp_c._priority))
 
             x_obs_cells, y_obs_cells, z_obs_cells = self.extract_coord_from_xyz(obs_cells)
@@ -1182,8 +1182,7 @@ if __name__ == '__main__':
 
     # ___________________________________________ Plotting (with no animation): ___________________________________________
 
-    agents_paths = [[(0, 0, 1), (1, 0, 1), (1, 1, 2), (1, 1, 3), (2, 1, 2)],
-                    [(0, 0, 1), (0, 1, 1), (1, 1, 0), (1, 1, 2), (1, 2, 3)]]
+    #agents_paths = [[(0, 0, 1), (1, 0, 1), (1, 1, 2), (1, 1, 3), (2, 1, 2)], [(0, 0, 1), (0, 1, 1), (1, 1, 0), (1, 1, 2), (1, 2, 3)]]
     plot.plt_map_views(obs_points, cs_points, eNB_point, hosp_points,
                        obs_cells, cs_cells, eNB_cells, hosp_cells, points_status_matrix,
                        cells_status_matrix, perceived_status_matrix, initial_users, initial_centroids,

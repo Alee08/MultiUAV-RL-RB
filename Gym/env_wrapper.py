@@ -23,21 +23,33 @@ from temprl.temprl.wrapper import *
 from iter import j
 
 # _________ Main training parameters:_________
+if HOSP_SCENARIO == True:
+    SHOW_EVERY = 50
+    LEARNING_RATE = 0.01         #alpha
+    #DISCOUNT = 0.95 originale
+    DISCOUNT = 0.99           #gamma
+    EPSILON = 0.01
+    EPSILON_DECR = False
+    EPSILON_DECREMENT = 0.999
+    #EPSILON_MIN = 0.01
+    #EPSILON_MIN2 = 0.4 originale
+    #EPSILON_MIN2 = 0.1
+    EPSILON_MIN = 0.01
+    EPSILON_MIN2 = 0.1
+    max_value_for_Rmax = 100
+    #ITERATIONS_PER_EPISODE = 160
+else:
+    SHOW_EVERY = 30
+    LEARNING_RATE = 1.0
+    DISCOUNT = 0.95
+    EPSILON = 1.0
+    EPSILON_DECREMENT = 0.998
+    EPSILON_MIN = 0.01
+    EPSILON_MIN2 = 0.4
 
-SHOW_EVERY = 50
-LEARNING_RATE = 0.01         #alpha
-#DISCOUNT = 0.95 originale
-DISCOUNT = 0.99           #gamma
-EPSILON = 0.01
-EPSILON_DECR = False
-EPSILON_DECREMENT = 0.999
-#EPSILON_MIN = 0.01
-#EPSILON_MIN2 = 0.4 originale
-#EPSILON_MIN2 = 0.1
-EPSILON_MIN = 0.01
-EPSILON_MIN2 = 0.1
-max_value_for_Rmax = 100
-#ITERATIONS_PER_EPISODE = 160
+    max_value_for_Rmax = 100
+    ITERATIONS_PER_EPISODE = 30
+
 #--------------------------------------------
 '''#parametri marco
 SHOW_EVERY = 50
@@ -658,7 +670,7 @@ if uavs_q_tables is None:
                             current_uav_explored_table[(x_agent, y_agent, z_agent), battery_level] = [False for action in range(n_actions)]
 
         uavs_q_tables[uav] = current_uav_q_table
-        uavs_e_tables[uav] = current_uav_q_table
+        #uavs_e_tables[uav] = current_uav_q_table
         if HOSP_SCENARIO == False:
             explored_states_q_tables[uav] = current_uav_explored_table
         print("Q-Table for Uav ", uav, " created")
@@ -739,7 +751,9 @@ if (HOSP_SCENARIO==True):
 
 print("\nSTART TRAINING . . .\n")
 for episode in range(1, EPISODES+1):
-    reset_uavs(agents[0])  #Da decidere se fare due funzioni separate per batteria e reset della posizione ad ogni episodio
+    #Guarda qui
+    #reset_uavs(agents[0])  #Da decidere se fare due funzioni separate per batteria e reset della posizione ad ogni episodio
+    #reset_uavs(agents[1])
     if HOSP_SCENARIO == True:
         reset_priority()
         env.reset()
@@ -801,15 +815,6 @@ for episode in range(1, EPISODES+1):
 
             env.all_users_in_all_foots = []
 
-        # step() TEST --> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :
-        '''
-        actions = [env.action_space.sample() for uav in range(N_UAVS)]
-        for uav in range(N_UAVS):
-            while (env.q_table_action_set[actions[uav]]==GO_TO_CS): # --> The action space decreases or increases for each UAV according to its buttery level, but the 'general' action space is invariate.
-                actions[uav] = env.action_space.sample()
-        o, r, done, info = env.step(actions)
-        '''
-
         for UAV in range(N_UAVS):
             #print("ID AGENTE: ", agents[UAV]._uav_ID)
             # Skip analyzing the current UAV features until it starts to work (you can set a delayed start for each uav):
@@ -835,14 +840,14 @@ for episode in range(1, EPISODES+1):
             #print(drone_pos, "drone_posdrone_posdrone_posdrone_posdrone_posdrone_posdrone_posdrone_posdrone_posdrone_posdrone_pos")
             if (HOSP_SCENARIO == True):
                 if (UNLIMITED_BATTERY == True):
-                    obs = (drone_pos, agents[UAV].beep, get_color_id(env.cells_matrix[drone_pos[0]][drone_pos[1]]._priority))
+                    obs = (drone_pos, agents[UAV].beep, get_color_id(env.cells_matrix[drone_pos[1]][drone_pos[0]]._priority))
                 else:
-                    obs = (drone_pos, agents[UAV]._battery_level, agents[UAV].beep, get_color_id(env.cells_matrix[drone_pos[0]][drone_pos[1]]._priority))
+                    obs = (drone_pos, agents[UAV]._battery_level, agents[UAV].beep, get_color_id(env.cells_matrix[drone_pos[1]][drone_pos[0]]._priority))
             else:
                 if (UNLIMITED_BATTERY == True):
                     obs = (drone_pos)
                 else:
-                    (drone_pos, agents[UAV]._battery_level) # --> The observation will be different when switch from 2D to 3D scenario and viceversa.
+                    obs = (drone_pos, agents[UAV]._battery_level) # --> The observation will be different when switch from 2D to 3D scenario and viceversa.
 
             #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             # Questa 'obs' viene passata a 'choose_action' senza 'beep' e senza colore prioritario (perhè in 'choose_action' questi due valori non vengono ancora considerati);
@@ -868,8 +873,8 @@ for episode in range(1, EPISODES+1):
 
 
 
-
-            #crashes_current_episode[UAV] = agents[UAV]._crashed
+            if HOSP_SCENARIO == False:
+                crashes_current_episode[UAV] = agents[UAV]._crashed
 
 
             print(" - Iteration: {it:1d} - Reward per UAV {uav:1d}: {uav_rew:6f}".format(it=i+1, uav=UAV+1, uav_rew=reward), end="\r", flush=True)
@@ -881,10 +886,8 @@ for episode in range(1, EPISODES+1):
             if ( (ANALYZED_CASE == 1) or (ANALYZED_CASE == 3) ): # --> UNLIMITED BATTERY
 
                 if (HOSP_SCENARIO == False):
-
                     obs = tuple([round(ob, 1) for ob in obs])
                     obs_ = tuple([round(ob, 1) for ob in obs_])
-
                     #obs = tuple([round(ob, 1) for ob in obs])
                     #obs_ = tuple([round(ob, 1) for ob in obs_[0][0]]) #CASO MARCO
                     #obs_ = tuple([round(ob, 1) for ob in (obs_[0][0]['x'], obs_[0][0]['y'])]) #CASO MARCO
@@ -894,10 +897,9 @@ for episode in range(1, EPISODES+1):
                     obs_ = ((obs_[0][0]['x'], obs_[0][0]['y']), obs_[0][0]['beep'], obs_[0][0]['color'])
 
             else: # --> LIMITED BATTERY
-
                 coords = tuple([round(ob, 1) for ob in obs[0]])
                 obs = tuple([coords, obs[1]])
-                coords_ = tuple([round(ob, 1) for ob in obs_[0][0]])
+                coords_ = tuple([round(ob, 1) for ob in obs_[0]])
                 obs_ = tuple([coords, obs_[1]])
 
             if HOSP_SCENARIO == False:
@@ -907,13 +909,14 @@ for episode in range(1, EPISODES+1):
             if HOSP_SCENARIO == True:
                 obs_recorder[UAV][i] = obs_ #HOSP_SCENARIO == FALSE: obs_recorder[UAV][i] = obs
                 #print("1 - obs_recorder[UAV]", obs_recorder[UAV])
+                uavs_episode_reward[UAV] += reward
             else:
                 obs_recorder[UAV][i] = obs
-            uavs_episode_reward[UAV] += reward
+
             if (UNLIMITED_BATTERY==False):
                 if (info=="IS CHARGING"):
-                    print("sbagliatoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
-                    breakpoint()
+                    #print("sbagliatoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
+                    #breakpoint()
                     if uavs_episode_reward[UAV] > best_policy[UAV]:
                         best_policy[UAV] = uavs_episode_reward[UAV]
                         best_policy_obs[UAV] = obs_recorder[UAV]
@@ -925,21 +928,29 @@ for episode in range(1, EPISODES+1):
                     obs_recorder[UAV] = [() for i in range(ITERATIONS_PER_EPISODE)]
             else:
                 #print("0 - best_policy[UAV]", best_policy[UAV], ">", "uavs_episode_reward[UAV]???", uavs_episode_reward[UAV])
-                if (current_iteration==ITERATIONS_PER_EPISODE or done):
+                if HOSP_SCENARIO == True:
+                    if (current_iteration==ITERATIONS_PER_EPISODE or done):
 
-                    #print(uavs_episode_reward[UAV], best_policy[UAV])
-                    if uavs_episode_reward[UAV] > best_policy[UAV]:
-                        #print("2 - obs_recorder[UAV]", obs_recorder[UAV])
-                        best_policy[UAV] = uavs_episode_reward[UAV]
-                        best_policy_obs[UAV] = obs_recorder[UAV]
-                        #print("2 - best_policy[UAV]", best_policy[UAV])
-                        #print("SALVO LA POLICY !!!!!!!!!!!!!!!!!!!!!!!!!")
-                    obs_recorder[UAV] = [() for i in range(ITERATIONS_PER_EPISODE)]
-                    #print("obs_recorder[UAV]", obs_recorder[UAV])
+                        #print(uavs_episode_reward[UAV], best_policy[UAV])
+                        if uavs_episode_reward[UAV] > best_policy[UAV]:
+                            #print("2 - obs_recorder[UAV]", obs_recorder[UAV])
+                            best_policy[UAV] = uavs_episode_reward[UAV]
+                            best_policy_obs[UAV] = obs_recorder[UAV]
+                            #print("2 - best_policy[UAV]", best_policy[UAV])
+                            #print("SALVO LA POLICY !!!!!!!!!!!!!!!!!!!!!!!!!")
+                        obs_recorder[UAV] = [() for i in range(ITERATIONS_PER_EPISODE)]
+                        #print("obs_recorder[UAV]", obs_recorder[UAV])
+                        #print("best_policy_obs[UAV]", best_policy_obs[UAV])
+                        #print("best_policy[UAV]", best_policy[UAV])
                     #print("best_policy_obs[UAV]", best_policy_obs[UAV])
-                    #print("best_policy[UAV]", best_policy[UAV])
-                #print("best_policy_obs[UAV]", best_policy_obs[UAV])
+                else:
+                    if (current_iteration == ITERATIONS_PER_EPISODE):
 
+                        if uavs_episode_reward[UAV] > best_policy[UAV]:
+                            best_policy[UAV] = uavs_episode_reward[UAV]
+                            best_policy_obs[UAV] = obs_recorder[UAV]
+
+                        obs_recorder[UAV] = [() for i in range(ITERATIONS_PER_EPISODE)]
 
             # Set all the users which could be no more served after the current UAV action (use different arguments according to the considered case!!!!!!!!!!!!!!!!!!):
             if HOSP_SCENARIO == False:
@@ -948,7 +959,7 @@ for episode in range(1, EPISODES+1):
 
 
 
-            if not done:
+            if not done or HOSP_SCENARIO == False:
                 if (Q_LEARNING==True):
                     #print("obs____________________________", obs_)
                     #print("obssssssssssssssssssssssssssssss", obs)
@@ -982,18 +993,18 @@ for episode in range(1, EPISODES+1):
                         current_e = uavs_e_tables[UAV][obs][action]
 
 
-# -------------------------PROVA1----------------------------------------------------------------------------
+    # -------------------------PROVA1----------------------------------------------------------------------------
 
                         '''delta = reward + DISCOUNT * future_reward - current_q
                         print("uavs_e_tables[UAV][obs][action]", uavs_e_tables[UAV][obs][action])
                         current_e += 1
                         print("uavs_e_tables[UAV][obs][action]", uavs_e_tables[UAV][obs][action])
-
+    
                         new_q = current_q + (1 - LEARNING_RATE) * delta * current_e
                         current_e = DISCOUNT * lambda_value * current_e'''
 
 
-#-------------------------PROVA2----------------------------------------------------------------------------
+    #-------------------------PROVA2----------------------------------------------------------------------------
                         print("ooooo", current_q)
                         # Computing the error
                         delta = reward + DISCOUNT * future_reward - current_q
@@ -1004,7 +1015,8 @@ for episode in range(1, EPISODES+1):
                         uavs_e_tables[UAV][obs][action] = 1
                         # Updating the Q values
                         q_tabl =  [i * (1 - LEARNING_RATE) * delta for i in uavs_e_tables[UAV][obs]]
-                        uavs_q_tables[UAV][obs] = [x + y for x, y in zip(uavs_q_tables[UAV][obs], q_tabl)]
+                        uavs_q_tables[UAV][obs] = [x
+                                                   + y for x, y in zip(uavs_q_tables[UAV][obs], q_tabl)]
                         print("44444", uavs_q_tables[UAV][obs])
                         print("55555", uavs_e_tables[UAV][obs])
                         print("fine", uavs_e_tables[UAV][obs][action])
@@ -1016,13 +1028,13 @@ for episode in range(1, EPISODES+1):
 
 
                         '''for obs in (uavs_q_tables[UAV][obs]):
-
+    
                             for action in (uavs_q_tables[UAV][action]):
                                 print(uavs_q_tables[UAV][obs][action])
-
+    
                                 uavs_q_tables[UAV][s][a] += (1 - LEARNING_RATE) * delta * uavs_e_tables[UAV][s][a]
                                 uavs_e_tables[UAV][s][a] = DISCOUNT * lambda_value * uavs_e_tables[UAV][s][a]'''
-# -------------------------PROVA2----------------------------------------------------------------------------
+    # -------------------------PROVA2----------------------------------------------------------------------------
 
                     elif (SARSA_lambda == True) and (SARSA== True) or (SARSA_lambda == True) and (Q_LEARNING == True) or (SARSA == True) and (Q_LEARNING == True):
                         assert False, "Invalid algorithm selection."
@@ -1037,18 +1049,24 @@ for episode in range(1, EPISODES+1):
 
                 if HOSP_SCENARIO == False:
                     #uavs_episode_reward[UAV] += reward
+                    uavs_episode_reward[UAV] += reward
                     current_UAV_bandwidth[UAV] += UAV_BANDWIDTH - agents[UAV]._bandwidth
                     current_requested_bandwidth[UAV] += env.current_requested_bandwidth
 
+                if HOSP_SCENARIO == False:
+                    reset_uavs(agents[UAV])
 
-            if done:
+            if done and HOSP_SCENARIO == True:
                 #print("uavs_episode_reward[UAV]", uavs_episode_reward[UAV], reward)
+
+                #reset_uavs(agents[1])
 
                 break
 
-        if done:
-            #print("uavs_episode_reward[UAV]", uavs_episode_reward[UAV], reward)
 
+        if done and HOSP_SCENARIO == True:
+            #print("uavs_episode_reward[UAV]", uavs_episode_reward[UAV], reward)
+            reset_uavs(agents[UAV])
             break
             # reset_uavs(agents[UAV])
 
@@ -1112,8 +1130,8 @@ for episode in range(1, EPISODES+1):
 
     #if ((episode%500)==0): #(episode%250)==0 # --> You can change the condition to show (to save actually) or not the scenario of the current episode.
 
-
-    env.render(saving_directory, episode, 20000)
+    if HOSP_SCENARIO == False:
+        env.render(saving_directory, episode, 500)
 
 
     #env.render(saving_directory, episode, 10000) # --> DO not work properly when using UAVsTemporalWrapper --> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1258,10 +1276,10 @@ if HOSP_SCENARIO == False:
     with open(join(saving_directory, "q_tables.pickle"), 'wb') as f:
         pickle.dump(uavs_q_tables, f)
 
-    print("Saving Min and Max values related to the Q-Tables for episode", episode, ". . .")
+    '''print("Saving Min and Max values related to the Q-Tables for episode", episode, ". . .")
     for uav in range(1, N_UAVS+1):
         plot.actions_min_max_per_epoch(uavs_q_tables, q_tables_directories[uav-1], episode, uav)
-    print("Min and Max values related to the Q-Tables for episode saved.\n")
+    print("Min and Max values related to the Q-Tables for episode saved.\n")'''
 
 policy_n.append(best_policy_obs)
 print("Policy:", policy_n, '\n')

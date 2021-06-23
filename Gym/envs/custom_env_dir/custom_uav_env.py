@@ -30,8 +30,9 @@ class UAVEnv(gym.Env):
         upper_limits = np.array([val[0] for val in LIMIT_VALUES_FOR_ACTION])
         lower_limits = np.array([val[1] for val in LIMIT_VALUES_FOR_ACTION])
 
-        o = idx_pos() #indice nuova pos start UAV UAVS_POS[o]
-        self.o = o
+        '''o = idx_pos() #indice nuova pos start UAV UAVS_POS[o]
+        self.o = o'''
+
         self.action_set_min = ACTION_SPACE_3D_MIN if DIMENSION_2D==False else ACTION_SPACE_2D_MIN
         if (UNLIMITED_BATTERY==True):
             self.q_table_action_set = self.action_set_min
@@ -152,8 +153,8 @@ class UAVEnv(gym.Env):
         else:
             current_action = ACTION_SPACE_STANDARD_BEHAVIOUR.index(action)
             agent_pos_, agent_is_off_map = agent.move_standard_behaviour(action)
-
-        self.last_commands[agent._uav_ID] = current_action # --> Controlla che uav_ID funzioni correttamente --> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if HOSP_SCENARIO == True:
+            self.last_commands[agent._uav_ID] = current_action # --> Controlla che uav_ID funzioni correttamente --> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         if ( ((action==CHARGE_2D_INDEX) or (action==CHARGE)) or ((action==GO_TO_CS_3D_INDEX) or (action==CHARGE)) ):
             agent._users_in_footprint = []
@@ -186,7 +187,7 @@ class UAVEnv(gym.Env):
             else:
                 #reward = self.reward_function_HOSP()
                 reward = 0
-                color_idx = get_color_id(self.cells_matrix[agent._occupied_cell_coords[0]][agent._occupied_cell_coords[1]]._priority)
+                color_idx = get_color_id(self.cells_matrix[agent._occupied_cell_coords[1]][agent._occupied_cell_coords[0]]._priority)
                 s_ = (agent_pos_, agent.beep, color_idx)
                 #print("_prioriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiity", color_idx)
 
@@ -628,7 +629,7 @@ class UAVEnv(gym.Env):
     def reset_priority(self):
         for i in range(CELLS_COLS):
             for j in range(CELLS_ROWS):
-                self.cells_matrix[i][j].bip_count = 0
+                self.cells_matrix[j][i].bip_count = 0
         #print("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo", self.cells_matrix[j][i].bip_count)
         '''for c in self.points_matrix:
             c.bip_count = 0'''
@@ -648,34 +649,22 @@ class UAVEnv(gym.Env):
 
         #Da decidere se fare due funzioni separate per batteria e reset della posizione ad ogni episodio
 
-        '''if (agent._battery_level == 0) or HOSP_SCENARIO == True:
+        if (agent._battery_level == 0) or HOSP_SCENARIO == True:
             agent._battery_level = FULL_BATTERY_LEVEL
             arise_pos_idx = np.random.choice(range(N_UAVS))
             arise_pos = self.initial_uavs_pos[arise_pos_idx]
-            print("UAV_ID:", j, "START_POS:", arise_pos)
 
-            #print(arise_pos, "arise_posarise_posarise_pos")
 
-            agent._x_coord = arise_pos[0]#+0.5
-            agent._y_coord = arise_pos[1]#+0.5
-            agent._z_coord = arise_pos[2]#+0.5
+            print("MISSION_ID:", j, "START_POS:", arise_pos)
+
+            # print(arise_pos, "arise_posarise_posarise_pos")
+
+            agent._x_coord = arise_pos[0]  # +0.5
+            agent._y_coord = arise_pos[1]  # +0.5
+            agent._z_coord = arise_pos[2]  # +0.5
 
             agent._charging = False
-            agent._coming_home = False'''
-
-        agent._battery_level = FULL_BATTERY_LEVEL
-        arise_pos_idx = np.random.choice(range(N_UAVS))
-        arise_pos = self.initial_uavs_pos[arise_pos_idx]
-        print("UAV_ID:", j, "START_POS:", arise_pos)
-
-        # print(arise_pos, "arise_posarise_posarise_pos")
-
-        agent._x_coord = arise_pos[0]  # +0.5
-        agent._y_coord = arise_pos[1]  # +0.5
-        agent._z_coord = arise_pos[2]  # +0.5
-
-        agent._charging = False
-        agent._coming_home = False
+            agent._coming_home = False
 
 
 

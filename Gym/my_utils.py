@@ -16,6 +16,9 @@ BP_DIRECTORY_NAME = 'Best_policy/'
 myfile = "./Best_policy/trajectory.csv"
 myfile_plot = "./Best_policy/policy_per_plot_.csv"
 
+with open("iter.py", "w") as text_file:
+    text_file.write('j =' + '{}'.format(0))
+
 if not isdir(CSV_DIRECTORY_NAME): mkdir(CSV_DIRECTORY_NAME)
 if not isdir(BP_DIRECTORY_NAME): mkdir(BP_DIRECTORY_NAME)
 
@@ -31,7 +34,7 @@ else:
 
 #CONFIGURATION------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # TRAINING PARAMETERS
-EPISODES = 8000 # epochs
+EPISODES = 5000 # epochs
 REDUCE_ITERATION_PER_EPISODE = False
 ITERATIONS_PER_EPISODE = 80
 NUMBER_ITER = ITERATIONS_PER_EPISODE
@@ -39,10 +42,11 @@ NO_INTERFERENCE_REWARD = False
 EPISODES_BP = 0
 
 N_MISSION = 3
-hosp_pos= [[(6, 2), (4, 6)], [(7,5), (2,4)], [(5, 9), (3, 2)], [(9,3),(0,12)], [(12, 18),(0,19)] , [(6,15),(12,1)] , [(18, 1), (15, 4)], [(17, 6), (15, 2)] , [(17, 17), (17, 12)], [(15, 18), (18, 10)]] #Posizione ospedali
+
+hosp_pos= [[(2, 6), (6, 4)], [(5,7), (4,2)], [(9, 5), (2, 3)], [(3,9),(12,0)], [(18, 12),(19, 0)] , [(15, 6),(1, 12)], [(1, 18), (4, 15)], [(6, 17), (2, 15)] , [(17, 17), (12, 17)], [(18, 15), (10, 18)]] #Posizione ospedali
 randomm = False #Posizione randomica degli ospedali
 Colorss = [['None', 'gold', 'orange', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'],['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'],['None', 'gold', 'orange'],['None', 'gold', 'orange']]
-UAVS_POS = [[(0, 5, 0)], [(3, 9, 0)], [(9, 1, 0)]] # caso tesi
+UAVS_POS = [[(0, 5, 0), (6, 4, 0)], [(3, 9, 0), (4, 4, 0), (4, 4, 0)], [(9, 1, 0)]] # caso tesi
 #UAVS_POS = [[(9, 0, 0)], [(3, 9, 0)], [(9, 1, 0)], [(1, 11, 0)], [(15, 15, 0)], [(14, 5, 0)] , [(4, 18, 0)], [(9, 19, 0)], [(19, 19, 0)], [(19, 14, 0)]]
 UAV_HEIGHT_Z = 0
 nb_colors = 2
@@ -70,9 +74,10 @@ def UAV_i(UAVS_POS, hosp_pos, Colors, j):
 	return Colors_, UAVS_POS_
 
 
-def idx_pos():
+'''def idx_pos():
 	idx = o
-	return idx
+	return idx'''
+
 '''ok = []
 for i in range(10):
 	for j in range(10):
@@ -271,10 +276,10 @@ CONTINUOUS_TIME = True
 
 MIDDLE_CELL_ASSUMPTION = True
 
-N_SERVICES = 0
+N_SERVICES = 3
 
 # OBSERVATION
-N_UC = 0
+N_UC = 3
 N_CS = 2
 N_HOSP = len(hosp_pos[j])
 
@@ -333,7 +338,7 @@ NORMALIZATION_FACTOR_WAITING_TIME_FOR_SERVIE = 120
 		x_max = y_max
 	return x_max, y_max'''
 
-AREA_WIDTH = 10
+AREA_WIDTH = 12
 AREA_HEIGHT = 10
 LOWER_BOUNDS = 0
 CELL_RESOLUTION_PER_ROW = 1
@@ -351,6 +356,9 @@ MIN_UAV_HEIGHT = 4
 RADIAL_DISTANCE_X = 4
 RADIAL_DISTANCE_Y = 4
 
+
+
+
 CREATE_ENODEB = False
 DIMENSION_2D = True # --> Enable/Disable 2D environment
 UNLIMITED_BATTERY = True # --> Enable/Disable battery limitation on UAVs
@@ -362,15 +370,20 @@ USERS_PRIORITY = False
 
 RAD_BETWEEN_POINTS = 2*pi/N_UAVS
 
+if HOSP_SCENARIO == True:
+	assert UNLIMITED_BATTERY == True, "UNLIMITED_BATTERY must be set to True if HOSP_SCENARIO is True"
+
+
 #UAVS_POS = []
-'''for uav_idx in range(N_UAVS):
-	if (DIMENSION_2D == True):
-		UAVS_POS.append( (round(ceil(CELLS_COLS/2) + RADIAL_DISTANCE_X*sin(uav_idx*RAD_BETWEEN_POINTS)), round(ceil(CELLS_ROWS/2) + RADIAL_DISTANCE_Y*cos(uav_idx*RAD_BETWEEN_POINTS)), 0) )
-	else:
-		UAVS_POS.append( (round(ceil(CELLS_COLS/2) + RADIAL_DISTANCE_X*sin(uav_idx*RAD_BETWEEN_POINTS)), round(ceil(CELLS_ROWS/2) + RADIAL_DISTANCE_Y*cos(uav_idx*RAD_BETWEEN_POINTS)), MIN_UAV_HEIGHT) )
-'''
-#UAVS_POS_2D = [(4,4), (2,4)]
-#UAVS_POS =[(3, 3, 0)] # PER SCEGLIERE LA POSIZIONE DELL'UAV
+if HOSP_SCENARIO == False:
+	for uav_idx in range(N_UAVS):
+		if (DIMENSION_2D == True):
+			UAVS_POS.append( (round(ceil(CELLS_COLS/2) + RADIAL_DISTANCE_X*sin(uav_idx*RAD_BETWEEN_POINTS)), round(ceil(CELLS_ROWS/2) + RADIAL_DISTANCE_Y*cos(uav_idx*RAD_BETWEEN_POINTS)), 0) )
+		else:
+			UAVS_POS.append( (round(ceil(CELLS_COLS/2) + RADIAL_DISTANCE_X*sin(uav_idx*RAD_BETWEEN_POINTS)), round(ceil(CELLS_ROWS/2) + RADIAL_DISTANCE_Y*cos(uav_idx*RAD_BETWEEN_POINTS)), MIN_UAV_HEIGHT) )
+
+	#UAVS_POS_2D = [(4,4), (2,4)]
+	#UAVS_POS =[(3, 3, 0)] # PER SCEGLIERE LA POSIZIONE DELL'UAV
 
 
 TR_BATTERY_CONSUMPTION = 1
@@ -606,7 +619,7 @@ SERVICE_PROBABILITIES = [0.1, 0.5, 0.25, 0.15]
 
 #CENTROIDS_MIN_MAX_COORDS = [[(2,2), (5, 5)], [(7, 7), (7,7)], [(6, 6), (2,2)], [(2, 2), (2,2)]] # --> [(min_x, max_x), (min_y, max_y)]
 #CENTROIDS_MIN_MAX_COORDS = [[(7, 7), (7,7)], [(6, 6), (2,2)], [(2, 2), (2,2)]] # [[(7, 7), (7,7)], [(2, 2), (2,2)]]
-CENTROIDS_MIN_MAX_COORDS = [[(2,2), (5, 5)], [(7, 7), (7,7)]]
+CENTROIDS_MIN_MAX_COORDS = [[(2,2), (5, 5)]] #, [(7, 7), (7,7)]]
 #CENTROIDS_MIN_MAX_COORDS = [[(2,2), (5, 5)]]
 FIXED_CLUSTERS_NUM = len(CENTROIDS_MIN_MAX_COORDS)
 # LIST OF THE NUMBER OF CLUSTERS TO TEST WHEN LOOKING FOR THE OPTIMAL NUMBER OF USERS CLUSTERS:

@@ -102,7 +102,7 @@ class Plot:
         # the states are extracted from 'matrix_area'.                      #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-        status_matrix = [[matrix_area[j][i]._status for j in range(area_width)] for i in range(area_height)]
+        status_matrix = [[matrix_area[i][j]._status for j in range(area_width)] for i in range(area_height)]
 
         return status_matrix
 
@@ -322,7 +322,7 @@ class Plot:
                 # num_clusters = len(centroids)
             else:
                 for hosp_c in hosp_cells:
-                    ax.add_artist(plt.Circle((hosp_c._y_coord, hosp_c._x_coord, hosp_c._z_coord), 0.35,
+                    ax.add_artist(plt.Circle((hosp_c._x_coord, hosp_c._y_coord, hosp_c._z_coord), 0.35,
                                              color=hosp_c._priority))
 
 
@@ -1237,6 +1237,7 @@ if __name__ == '__main__':
     #agents_paths = [[(0, 5), (1, 5), (1, 6), (2, 6), (2, 6), (2, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6), (6, 5), (6, 4), (6, 4), (6, 4), (6, 4), (6, 4), (6, 4), (6, 4), (6, 4), (6, 4)], [(1, 8), (2, 8), (3, 8), (3, 7), (4, 7), (5, 7), (5, 7), (5, 7), (5, 7), (5, 6), (5, 5), (5, 4), (5, 3), (5, 2), (4, 2), (4, 2), (4, 2), (4, 2), (4, 2), (4, 2), (4, 2)], [(10, 3), (10, 4), (10, 5), (9, 5), (9, 5), (9, 5), (9, 5), (9, 4), (9, 3), (8, 3), (7, 3), (6, 3), (5, 3), (4, 3), (3, 3), (2, 3), (2, 3), (2, 3), (2, 3), (2, 3), (2, 3)]] #con interf
     #agents_paths = [[(0, 5), (1, 5), (1, 6), (2, 6), (2, 6), (2, 6), (2, 6), (3, 6), (4, 6), (5, 6), (6, 6), (6, 5), (6, 4), (6, 4), (6, 4), (6, 4), (6, 4), (6, 4), (6, 4), (6, 4), (6, 4)], [(1, 8), (2, 8), (3, 8), (3, 7), (4, 7), (5, 7), (5, 7), (5, 7), (5, 7), (6, 7), (7, 7), (7, 6), (7, 5), (7, 4), (7, 3), (6, 3), (5, 3), (5, 2), (4, 2), (4, 2), (4, 2)], [(10, 3), (10, 4), (10, 5), (9, 5), (9, 5), (9, 5), (9, 5), (9, 4), (9, 3), (9, 2), (8, 2), (7, 2), (6, 2), (6, 1), (5, 1), (4, 1), (3, 1), (3, 2), (3, 3), (2, 3), (2, 3)]]
     max_paths = 0
+
     for i in range(len(agents_paths)):
         print(i)
         if len(agents_paths[i]) > max_paths:
