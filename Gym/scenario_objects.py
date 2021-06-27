@@ -15,7 +15,24 @@ from load_and_save_data import *
 # o = idx_pos()
 from iter import *
 
-hosp_pos = hosp_pos[j]
+
+
+if HOSP_SCENARIO == True:
+    if j != None:
+        hosp_pos = hosp_pos[j]
+    else:
+        hosp_pos_ = []
+        # hosp_pos = [[(6, 2), (4, 6)], [(7,5), (2,4)], [(5, 9), (3, 2)]]
+        for i in range(len(hosp_pos)):
+            for j in range(len(hosp_pos[i])):
+                hosp_pos_.append(hosp_pos[i][j])
+        hosp_pos = hosp_pos_
+
+        N_HOSP = len(hosp_pos)
+
+else:
+    hosp_pos = hosp_pos[j]
+
 
 class Priority:
 
@@ -1171,13 +1188,13 @@ if __name__ == '__main__':
     # Ensure to have the centroids listed in the correct order (the clusterer may classified the 'initial_centroids' in a different order w.r.t the 'centroids')
     initial_centroids_aux = []
     values_to_check = []
-        
+
     for centroid_idx in range(FIXED_CLUSTERS_NUM):
-        
+
         for initial_centroid_idx in range(FIXED_CLUSTERS_NUM):
             value_to_check1 = abs(centroids[centroid_idx][0]-initial_centroids[initial_centroid_idx][0])
             value_to_check2 = abs(centroids[centroid_idx][1]-initial_centroids[initial_centroid_idx][1])
-            
+
             if ( (value_to_check1 < 2) and (value_to_check2 < 2) ):
                 initial_centroids_aux.append(initial_centroids[initial_centroid_idx])
 

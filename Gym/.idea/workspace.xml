@@ -5,61 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3da1a9f-6154-40b3-a7b5-bc7a950b4aa4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/ciao.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Best_policy/Best_policys.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Best_policy/Best_policys.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Best_policy/best_policy_obs.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Best_policy/best_policy_obs.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Best_policy/policy_per_plot_.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Best_policy/policy_per_plot_.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Best_policy/trajectory.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Best_policy/trajectory.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/UAV1/best_policy.npy" beforeDir="false" afterPath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/UAV1/best_policy.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/animation_ep10000.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/animation_ep20000.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/animation_ep40000.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/env_and_train_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_0clusters/Random Initialization/env_and_train_info.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/Best-rewards.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/Epsilon_per_epoch.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/Q-values_per_epoch_UAVs.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/QoE1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/QoE2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/QoE3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/Rewards_per_epoch_UAVs.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/UAV1/QTables/qtable-ep1000.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/UAV1/QTables/qtable-ep15000.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/UAV1/QTables/qtable-ep20000.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/UAV1/QTables/qtable-ep5000.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/UAV1/QTables/qtable-ep50000.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/UAV1/QTables\qtable_graph-ep1000.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/UAV1/QTables\qtable_graph-ep15000.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/UAV1/QTables\qtable_graph-ep20000.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/UAV1/QTables\qtable_graph-ep5000.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/UAV1/QTables\qtable_graph-ep50000.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/UAV1/best_policy.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep1.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep100.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep10000.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep200.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep20000.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep230.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep241.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep300.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep30000.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep381.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep400.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep40000.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/animation_ep50000.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/env_and_train_info.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cases/2D_un_bat_inf_req_1UAVs_2clusters/Random Initialization/q_tables.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environment_Views/Desired_Resolution.png" beforeDir="false" afterPath="$PROJECT_DIR$/Environment_Views/Desired_Resolution.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environment_Views/Minimum_Resolution.png" beforeDir="false" afterPath="$PROJECT_DIR$/Environment_Views/Minimum_Resolution.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/animation_scenario.gif" beforeDir="false" afterPath="$PROJECT_DIR$/animation_scenario.gif" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/env_wrapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/env_wrapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/custom_env_dir/custom_uav_env.py" beforeDir="false" afterPath="$PROJECT_DIR$/envs/custom_env_dir/custom_uav_env.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iter.py" beforeDir="false" afterPath="$PROJECT_DIR$/iter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my_awesome_automaton" beforeDir="false" afterPath="$PROJECT_DIR$/my_awesome_automaton" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my_awesome_automaton.svg" beforeDir="false" afterPath="$PROJECT_DIR$/my_awesome_automaton.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plotting.py" beforeDir="false" afterPath="$PROJECT_DIR$/plotting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plotting_mission.py" beforeDir="false" afterPath="$PROJECT_DIR$/plotting_mission.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenario_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/scenario_objects.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,11 +42,11 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Scaricati/MultiUAV-OpenAIGym-master-ORIGINALE/custom_gym/envs/custom_env_dir/custom_uav_env.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Github27Giugno-MultiUav/MultiUAV-RL-RB-main/Gym/my_utils.py" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="two.files.diff.last.used.file" value="$USER_HOME$/Scaricati/MultiUAV-OpenAIGym-master-ORIGINALE/custom_gym/envs/custom_env_dir/custom_uav_env.py" />
+    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/../../Github27Giugno-MultiUav/MultiUAV-RL-RB-main/Gym/my_utils.py" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -105,7 +61,7 @@
       <workItem from="1623687680452" duration="672000" />
       <workItem from="1623763203456" duration="284000" />
       <workItem from="1623768594681" duration="23388000" />
-      <workItem from="1624288239581" duration="36861000" />
+      <workItem from="1624288239581" duration="62409000" />
     </task>
     <servers />
   </component>

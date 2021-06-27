@@ -17,6 +17,8 @@ from scenario_objects import Point, Cell, User, Priority
 import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib import animation
 from statistics import stdev
+from iter import j
+
 
 # If EnodeB has not been created in 'scenario_objets', then if you try to plot it, it will obviously raise an Error.
 
@@ -187,6 +189,53 @@ class Plot:
         ORANGE = '#FFA500'
         GREY = '#808080'
         BROWN = '#A52A2A'
+        P_GOLD = '#FFD700'
+        P_ORANGE = "#F08000"
+
+        P_BLU = "#FFD700"
+        P_DARK_BLU = "#FFD700"
+
+        P_GREEN = "#FFD700"
+        P_DARK_GREEN = "#FFD700"
+
+        P_FUCHSIA = "#FF00FF"
+        P_PURPLE = "#cf03fc"
+
+        P_PINK = "#FFB6C1"
+        P_DARK_PINK = "#FF69B4"
+
+        P_BROWN = "#A0522D"
+        P_BROWN_DARK = "#8B4513"
+
+        P_CYAN = "#FAFAD2"
+        P_DARK_CYAN = "#00FFFF"
+
+        P_LAVANDER = "#E6E6FA"
+        P_DARK_LAVANDER = "#D8BFD8"
+
+        P_NAVAJO = "#FFDEAD"
+        P_DARK_NAVAJO = "#F4A460"
+
+        P_GRAY = "#708090"
+        P_DARK_GREY = "#2F4F4F"
+
+        P_SALMON = "#FA8072"
+        P_DARK_SALMON = "#E9967A"
+
+        P_SKY_BLUE = "#ADD8E6"
+        P_DARK_SKY_BLUE = "#00BFFF"
+
+        P_LIGHT_GREEN = "#90EE90"
+        P_DARK_LIGHT_GREEN = "#7FFF00"
+
+        P_PAPAYA_YELLOW = "#FAFAD2"
+        P_DARK_PAPAYA_YELLOW = "#FFEFD5"
+
+        P_RED_LIGHT = "#DC143C"
+        P_RED_LIGHT_DARK = "#B22222"
+
+        P_RED = "#FF0000"
+        P_DARK_RED = "#8B0000"
         #UAVS_COLORS = [VIOLET, ORANGE, GREY, BROWN]
 
         # Define colored canvas for the legend:
@@ -207,6 +256,7 @@ class Plot:
         HOSP_4_CIRCLE = mlines.Line2D([], [], color=P_BROWN, marker='o', markersize=15, label="Priority 4")'''
         HOSP_CIRCLES = [mlines.Line2D([], [], color=HOSP_PRIORITIES[i], marker='o', markersize=15, label="Goal 2 " ) if i % 2 == 0 else mlines.Line2D([], [], color=HOSP_PRIORITIES[i], marker='o', markersize=15, label="Goal 1 " )
             for i in range(1, N_HOSP + 1)]
+
             #mlines.Line2D([], [], color=HOSP_PRIORITIES[i], marker='o', markersize=15, label="Priority " + str(i + 1))
             #for i in range(1, N_HOSP + 1)]
 
@@ -407,11 +457,17 @@ class Plot:
                     ax.add_patch(patch)
 
             n_agents_paths = len(agents_paths[0])
-            if (n_agents_paths == last_render):
+            '''if (n_agents_paths == last_render):
                 animation_frames = last_render
             else:
-                animation_frames = n_agents_paths - last_render
-
+                animation_frames = n_agents_paths - last_render'''
+            if last_render != None:
+                if (n_agents_paths==last_render):
+                    animation_frames = last_render
+                else:
+                    animation_frames = n_agents_paths - last_render
+            else:
+                animation_frames = n_agents_paths
             # print("UEEEEEEEEEEEEEE: ", n_agents_paths, last_render)
             # print("FRAMEEEEEEEEEEEEEEEEEEEEEEE: ", animation_frames)
             # print("LINESSSSSSSSSSSSSSSSSSSSSSS: ", lines)
@@ -434,7 +490,7 @@ class Plot:
                 plt.close(fig)
             else:
                 plt.show()
-
+            ani.save(join("./", "animation_scenario" + ".gif"), writer='imagemagick')
         # ______________________________________________________________ FIGURES FOR STATIC ENVIRNONMENT VISUALIZATION (WITHOUT UAVS): ______________________________________________________________
 
         else:
@@ -1181,12 +1237,51 @@ if __name__ == '__main__':
     # _______________________________________________________________________________________________________________________
 
     # ___________________________________________ Plotting (with no animation): ___________________________________________
+    max_paths = 0
 
-    #agents_paths = [[(0, 0, 1), (1, 0, 1), (1, 1, 2), (1, 1, 3), (2, 1, 2)], [(0, 0, 1), (0, 1, 1), (1, 1, 0), (1, 1, 2), (1, 2, 3)]]
-    plot.plt_map_views(obs_points, cs_points, eNB_point, hosp_points,
-                       obs_cells, cs_cells, eNB_cells, hosp_cells, points_status_matrix,
-                       cells_status_matrix, perceived_status_matrix, initial_users, initial_centroids,
-                       initial_clusters_radiuses, AREA_HEIGHT, AREA_WIDTH, CELLS_ROWS, CELLS_COLS, agents_paths=None,
-                       path_animation=False)
+
+
+    if j == None and HOSP_SCENARIO == True:
+        for i in range(len(agents_paths)):
+            print(i)
+            if len(agents_paths[i]) > max_paths:
+                max_paths = len(agents_paths[i])
+            else:
+                pass
+        #print(ciao, "numero")
+        '''for i in range(len(agents_paths)):
+            print(len(agents_paths[i]))'''
+
+        for i in range(len(agents_paths)):
+            if (len(agents_paths[i])) < max_paths:
+                for j in range(max_paths - len(agents_paths[i])):
+                    agents_paths[i].append((agents_paths[i][len(agents_paths[i]) - 1]))
+            else:
+                pass
+
+        for i in range(len(agents_paths)):
+            print(len(agents_paths[i]))
+
+        # agents_paths = [[(0, 0, 1), (1, 0, 1), (1, 1, 2), (1, 1, 3), (2, 1, 2)], [(0, 0, 1), (0, 1, 1), (1, 1, 0), (1, 1, 2), (1, 2, 3)]]
+        print("PLOTTING_SCENARIO..")
+        plot.plt_map_views(obs_points, cs_points, eNB_point, hosp_points,
+                           obs_cells, cs_cells, eNB_cells, hosp_cells, points_status_matrix,
+                           cells_status_matrix, perceived_status_matrix, initial_users, initial_centroids,
+                           initial_clusters_radiuses, AREA_HEIGHT, AREA_WIDTH, CELLS_ROWS, CELLS_COLS, agents_paths,
+                           path_animation=True)
+    else:
+        print("PLOTTING_SCENARIO..")
+        plot.plt_map_views(obs_points, cs_points, eNB_point, hosp_points,
+                           obs_cells, cs_cells, eNB_cells, hosp_cells, points_status_matrix,
+                           cells_status_matrix, perceived_status_matrix, initial_users, initial_centroids,
+                           initial_clusters_radiuses, AREA_HEIGHT, AREA_WIDTH, CELLS_ROWS, CELLS_COLS,
+                           agents_paths=None,
+                           path_animation=False)
+
+
+
+
+
+
 
     # _____________________________________________________________________________________________________________________

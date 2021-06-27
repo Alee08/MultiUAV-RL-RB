@@ -49,10 +49,11 @@ for j in range(N_MISSION):
     if N_MISSION > 1:
         j = j + 1
 
-
+with open("iter.py", "w") as text_file:
+    text_file.write('j =' + '{}'.format('None'))
 
 if HOSP_SCENARIO == True:
-    os.system('python3 scenario_objects_mission.py')
-    os.system('python3 plotting_mission.py')
+    os.system('python3 scenario_objects.py')
+    os.system('python3 plotting.py')
 
 

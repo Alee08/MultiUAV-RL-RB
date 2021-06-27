@@ -16,8 +16,8 @@ BP_DIRECTORY_NAME = 'Best_policy/'
 myfile = "./Best_policy/trajectory.csv"
 myfile_plot = "./Best_policy/policy_per_plot_.csv"
 
-with open("iter.py", "w") as text_file:
-    text_file.write('j =' + '{}'.format(0))
+'''with open("iter.py", "w") as text_file:
+    text_file.write('j =' + '{}'.format(0))'''
 
 if not isdir(CSV_DIRECTORY_NAME): mkdir(CSV_DIRECTORY_NAME)
 if not isdir(BP_DIRECTORY_NAME): mkdir(BP_DIRECTORY_NAME)
@@ -34,7 +34,7 @@ else:
 
 #CONFIGURATION------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # TRAINING PARAMETERS
-EPISODES = 5000 # epochs
+EPISODES = 8000 # epochs
 REDUCE_ITERATION_PER_EPISODE = False
 ITERATIONS_PER_EPISODE = 80
 NUMBER_ITER = ITERATIONS_PER_EPISODE
@@ -46,7 +46,7 @@ N_MISSION = 3
 hosp_pos= [[(2, 6), (6, 4)], [(5,7), (4,2)], [(9, 5), (2, 3)], [(3,9),(12,0)], [(18, 12),(19, 0)] , [(15, 6),(1, 12)], [(1, 18), (4, 15)], [(6, 17), (2, 15)] , [(17, 17), (12, 17)], [(18, 15), (10, 18)]] #Posizione ospedali
 randomm = False #Posizione randomica degli ospedali
 Colorss = [['None', 'gold', 'orange', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'],['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'], ['None', 'gold', 'orange'],['None', 'gold', 'orange'],['None', 'gold', 'orange']]
-UAVS_POS = [[(0, 5, 0), (6, 4, 0)], [(3, 9, 0), (4, 4, 0), (4, 4, 0)], [(9, 1, 0)]] # caso tesi
+UAVS_POS = [[(0, 5, 0), (6, 4, 0), (1, 3, 0)], [(3, 9, 0), (4, 4, 0), (4, 4, 0)], [(9, 1, 0)]] # caso tesi
 #UAVS_POS = [[(9, 0, 0)], [(3, 9, 0)], [(9, 1, 0)], [(1, 11, 0)], [(15, 15, 0)], [(14, 5, 0)] , [(4, 18, 0)], [(9, 19, 0)], [(19, 19, 0)], [(19, 14, 0)]]
 UAV_HEIGHT_Z = 0
 nb_colors = 2
@@ -281,7 +281,16 @@ N_SERVICES = 3
 # OBSERVATION
 N_UC = 3
 N_CS = 2
-N_HOSP = len(hosp_pos[j])
+
+
+if j != None:  #Aggiustare in un modo più elegante.. Se j = None, plot dello scenario finale.
+	N_HOSP = len(hosp_pos[j])
+else:
+	N_HOSP = 2
+
+
+
+
 
 count = 0
 for i in range(len(hosp_pos)):

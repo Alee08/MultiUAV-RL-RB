@@ -1348,7 +1348,7 @@ if HOSP_SCENARIO == True:
 
 
 
-import shutil
+'''import shutil
 
 dir_path = './map_data/'
 
@@ -1373,15 +1373,10 @@ try:
 except OSError as e:
     print("Error: %s : %s" % (dir_path, e.strerror))
 dir_path = './envs/__pycache__'
-'''try:
-    shutil.rmtree(dir_path)
-except OSError as e:
-    print("Error: %s : %s" % (dir_path, e.strerror))
-dir_path = './temprl/temprl/envs/__pycache__' '''
 try:
     shutil.rmtree(dir_path)
 except OSError as e:
-    print("Error: %s : %s" % (dir_path, e.strerror))
+    print("Error: %s : %s" % (dir_path, e.strerror))'''
 
 #breakpoint()
 
