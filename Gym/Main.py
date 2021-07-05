@@ -1,10 +1,14 @@
 import os
 from subprocess import Popen
-with open("iter.py", "w") as text_file:
-    text_file.write('j =' + '{}'.format(0))
-from my_utils import N_MISSION
-from my_utils import HOSP_SCENARIO
+
+with open("iter.txt", "w") as text_file:
+    text_file.write('{}'.format(0))
+
+from configuration import Config
 import shutil
+
+conf = Config()
+
 
 myfile_initial_users = "./initial_users/"
 myfile_map_data = "./map_data/"
@@ -37,22 +41,24 @@ j = 0
 
 
 
-for j in range(N_MISSION):
+for j in range(conf.N_MISSION):
 
 
-    with open("iter.py", "w") as text_file:
-        text_file.write('j =' + '{}'.format(j))
+    with open("iter.txt", "w") as text_file:
+        text_file.write('{}'.format(j))
+
 
     os.system('python3 scenario_objects.py')
     os.system('python3 plotting.py')
     os.system('python3 env_wrapper.py')
-    if N_MISSION > 1:
+    if conf.N_MISSION > 1:
         j = j + 1
 
-with open("iter.py", "w") as text_file:
-    text_file.write('j =' + '{}'.format('None'))
 
-if HOSP_SCENARIO == True:
+with open("iter.txt", "w") as text_file:
+    text_file.write('{}'.format(1000)) #Il numero 1000 indica lo scenario finale.
+
+if conf.HOSP_SCENARIO == True:
     os.system('python3 scenario_objects.py')
     os.system('python3 plotting.py')
 

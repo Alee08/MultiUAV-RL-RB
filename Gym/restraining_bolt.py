@@ -3,12 +3,14 @@ import logging
 from flloat.parser.ldlf import LDLfParser
 from flloat.semantics import PLInterpretation
 from load_and_save_data import Loader
-from my_utils import *
+from configuration import Config
+
 #from gym_sapientino.core.types import Colors
 from asyncio import sleep
 
 from temprl.temprl.wrapper import TemporalGoal # --> Probabilmente dovrai sistemare il path --> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+conf = Config()
 
 class RestrainingBolt:
 
@@ -49,7 +51,7 @@ class RestrainingBolt:
     @staticmethod
     def extract_sapientino_fluents(obs, action) -> PLInterpretation:
         fluents = set()
-        if (UNLIMITED_BATTERY == True):
+        if (conf.UNLIMITED_BATTERY == True):
             beep = obs[0]['beep']
             color_idx = int(obs[0]['color'])
 

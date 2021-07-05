@@ -33,11 +33,14 @@ from gym.spaces import Discrete, MultiDiscrete
 from gym.spaces import Tuple as GymTuple
 from pythomata.base import State, Symbol
 from pythomata.dfa import DFA
-from my_utils import *
+#from my_utils import *
 #import graphviz
 from temprl.temprl.automata import RewardAutomatonSimulator, RewardDFA, TemporalLogicFormula
 #from envs.custom_env_dir.custom_uav_env import UAVEnv
 #from env_wrapper import *
+from configuration import Config
+
+conf = Config()
 
 logger = logging.getLogger(__name__)
 
@@ -213,7 +216,7 @@ class TemporalGoalWrapper(gym.Wrapper):
     def step_agent(self, agent, action):  # step_agent(self, agent, action)
         """Do a step in the Gym environment."""
         obs, reward, done, info = self.env.step_agent(agent, action)  # super().step(agent, action)
-        if (UNLIMITED_BATTERY == True):
+        if (conf.UNLIMITED_BATTERY == True):
             #print("obs[2]", obs[2]._priority)
             #color_idx = get_color_id(obs[2]._priority)
             color_idx = obs[2]

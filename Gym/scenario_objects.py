@@ -4,7 +4,7 @@ from enum import Enum
 from random import random, randint
 from scipy.stats import truncnorm
 import numpy as np
-from my_utils import *
+from configuration import *
 from math import floor, pi, cos, sin, log10
 from decimal import Decimal
 from sklearn.cluster import KMeans
@@ -13,32 +13,39 @@ from numpy import linalg as LA
 #from pylayers.antprop.loss import *
 from load_and_save_data import *
 # o = idx_pos()
-from iter import *
+#from iter import *
+from configuration import j
+from configuration import Config
+from settings.users_accounts import *
+from settings.services_features import *
+from settings.hosp_scenario import hosp_features
+
+conf = Config()
+hosp_f = hosp_features()
 
 
-
-if HOSP_SCENARIO == True:
-    if j != None:
-        hosp_pos = hosp_pos[j]
+if conf.HOSP_SCENARIO == True:
+    if j != 1000:
+        hosp_pos = conf.hosp_pos[j]
     else:
         hosp_pos_ = []
         # hosp_pos = [[(6, 2), (4, 6)], [(7,5), (2,4)], [(5, 9), (3, 2)]]
-        for i in range(len(hosp_pos)):
-            for j in range(len(hosp_pos[i])):
-                hosp_pos_.append(hosp_pos[i][j])
+        for i in range(len(conf.hosp_pos)):
+            for j in range(len(conf.hosp_pos[i])):
+                hosp_pos_.append(conf.hosp_pos[i][j])
         hosp_pos = hosp_pos_
 
-        N_HOSP = len(hosp_pos)
+        conf.N_HOSP = len(hosp_pos)
 
 else:
-    hosp_pos = hosp_pos[j]
+    hosp_pos = conf.hosp_pos[j]
 
-
+print(hosp_pos, "hosp_pos")
 class Priority:
 
     def __init__(self):
         pass
-    if randomm == True:
+    if conf.randomm == True:
         @staticmethod
         def hosp_priority(hospitals, matrix_elems, points=True):
             all_priorities = []
@@ -50,8 +57,8 @@ class Priority:
                 #print(count)
                 if (points==True):
                     #print(priority_idx)
-                    hosp._priority = HOSP_PRIORITIES[priority_idx]
-                    if N_HOSP == 2:
+                    hosp._priority = conf.HOSP_PRIORITIES[priority_idx]
+                    if conf.N_HOSP == 2:
                         if count == 2:
                             current_priority = hosp._priority
                             receiver = True
@@ -68,7 +75,7 @@ class Priority:
                             priority_idx += 1
                             receiver = False
 
-                    all_priorities.append(get_color_name(current_priority))
+                    all_priorities.append(hosp_f.get_color_name(current_priority))
                     matrix_elems[hosp._y_coord][hosp._x_coord].receiver = receiver
 
                 count += 1
@@ -79,6 +86,7 @@ class Priority:
                 #print(all_priorities)
             return all_priorities
     else:
+        #print(N_HOSP, "N_HOSP")
         @staticmethod
         def hosp_priority(hospitals, matrix_elems, points=True):
             all_priorities = []
@@ -89,10 +97,9 @@ class Priority:
             receiver = None
             for hosp in hospitals:
 
-                # print(count)
                 if (points == True):
-                    # print(priority_idx)
-                    hosp._priority = HOSP_PRIORITIES[priority_idx]
+
+                    hosp._priority = conf.HOSP_PRIORITIES[priority_idx]
                         # hosp._priority = HOSP_PRIORITIES[np.random.randint(1, PRIORITY_NUM+1)]
                     receiver = True
                     if count% 2 != 0:
@@ -103,7 +110,7 @@ class Priority:
                     priority_idx += 1
                     #hosp._x_coord = hosp_pos[i][0]
                     #hosp._y_coord = hosp_pos[i][1]
-                    all_priorities.append(get_color_name(current_priority))
+                    all_priorities.append(hosp_f.get_color_name(current_priority))
                     matrix_elems[hosp._y_coord][hosp._x_coord].receiver = receiver
 
                 count += 1
@@ -115,7 +122,6 @@ class Priority:
                 #print(hosp._y_coord, "weee")
                 i = i + 1
                 #print(hosp._x_coord, hosp._y_coord)
-
             return all_priorities
 
 class Cell:
@@ -224,14 +230,14 @@ class User:
     @property
     def _service_interrupted(self):
         # Case in which the current user is not served AND the time for which the user has been served is greater than 0 (i.e., it has been served previously) AND the time for which the user has been served is lower than the needed time of the service:
-        if ( (self._info[0]!=NO_SERVICE) and (self._info[0]==False) and (self._info[4]>0) and (self._info[4]<self._info[2]) ):
+        if ( (self._info[0]!=UsersServices.NO_SERVICE.value) and (self._info[0]==False) and (self._info[4]>0) and (self._info[4]<self._info[2]) ):
             return True
         else: 
             return False
 
     @property
     def _service_completed(self):
-        if ( (self._info[0]!=NO_SERVICE) and (self._info[4]==self._info[2]) ): # --> A check on the user request (NO_SERVICE or SERVICE request) AND on the service_time (w.r.t. the needed service time) is necessary in order to set a service as completed or not.
+        if ( (self._info[0]!=UsersServices.NO_SERVICE.value) and (self._info[4]==self._info[2]) ): # --> A check on the user request (NO_SERVICE or SERVICE request) AND on the service_time (w.r.t. the needed service time) is necessary in order to set a service as completed or not.
             return True
         else:
             return False
@@ -242,7 +248,7 @@ class User:
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ## # # # # # # # # # # # # # # #
 
         # Save the the values at the end of the epoch (when the current iteration step is the last one for the current epoch):
-        if (current_iteration==ITERATIONS_PER_EPISODE):
+        if (current_iteration==conf.ITERATIONS_PER_EPISODE):
             QoEs_store[0].append(self._info[4]/self._info[2]) if self._info[2]!=0 else 0
             QoEs_store[1].append(self._info[3])
 
@@ -250,7 +256,7 @@ class User:
 
         # _________________________________________________ Case of NO SERVICE PROVISION when asking a service : _________________________________________________  
         
-        if ( (self._info[1] != NO_SERVICE) and (self._info[0] == False) ):
+        if ( (self._info[1] != UsersServices.NO_SERVICE.value) and (self._info[0] == False) ):
             
             # Increase the elapsed time between the request and the provision of the service. 
             self._info[3] += 1
@@ -271,13 +277,13 @@ class User:
         
         # _________________________________________________ Case of SERVICE PROVISION when asking a service ______________________________________________________
 
-        elif ( (self._info[1] != NO_SERVICE) and (self._info[0] == True) ):
+        elif ( (self._info[1] != UsersServices.NO_SERVICE.value) and (self._info[0] == True) ):
 
-            if (self._info[1]==THROUGHPUT_REQUEST):
+            if (self._info[1]==UsersServices.THROUGHPUT_REQUEST.value):
                 current_provided_services[0] += 1
-            elif (self._info[1]==EDGE_COMPUTING):
+            elif (self._info[1] == UsersServices.EDGE_COMPUTING.value):
                 current_provided_services[1] += 1
-            elif (self._info[1]==DATA_GATHERING):
+            elif (self._info[1] == UsersServices.DATA_GATHERING.value):
                 current_provided_services[2] += 1
 
             # Increase the time for which the service is provided. 
@@ -300,7 +306,7 @@ class User:
 
             # if the requested service time is equal to the provision time of the service, then the user will stop to ask for a service:
             self._info[0] = False 
-            self._info[1] = NO_SERVICE
+            self._info[1] = UsersServices.NO_SERVICE.value
             self._info[2] = 0
             self._info[3] = 0
             self._info[4] = 0 
@@ -318,7 +324,7 @@ class User:
         # the info related to the considered user is reset. In any case, the 'QoE' method allows you to track the actual info related to each user by negletting these 'switching service time'.
 
         # Save the the values at the end of the epoch (when the current iteration step is the last one for the current epoch):
-        if (current_iteration==ITERATIONS_PER_EPISODE):
+        if (current_iteration==conf.ITERATIONS_PER_EPISODE):
             QoEs_store[0].append(self._info[4]/self._info[2]) if self._info[2]!=0 else 0
             QoEs_store[1].append(self._info[3])
 
@@ -369,7 +375,7 @@ class User:
             # if the requested service time is equal to the provision time of the service, then the user will stop to ask for a service:
             self._info[0] = False
             self._info[1] = None
-            self._info[2] = ITERATIONS_PER_EPISODE
+            self._info[2] = conf.ITERATIONS_PER_EPISODE
             self._info[3] = 0
             self._info[4] = 0 
             self._info[5] = 0
@@ -431,17 +437,17 @@ class User:
             
             # Limits for 'x':
             users_for_current_cluster = randint(min_users_per_cluster, max_users_per_cluster)
-            x_low_limit = mean[0]-(UAV_FOOTPRINT)
-            x_up_limit = mean[0]+(UAV_FOOTPRINT)
+            x_low_limit = mean[0]-(conf.UAV_FOOTPRINT)
+            x_up_limit = mean[0]+(conf.UAV_FOOTPRINT)
             x_lower_bound = x_low_limit if x_low_limit>0 else 0
-            x_upper_bound = x_up_limit if x_up_limit<AREA_WIDTH else AREA_WIDTH   
+            x_upper_bound = x_up_limit if x_up_limit<conf.AREA_WIDTH else conf.AREA_WIDTH
             
             # Limits for 'y':
             users_for_current_cluster = randint(min_users_per_cluster, max_users_per_cluster)
-            y_low_limit = mean[1]-(UAV_FOOTPRINT-1)
-            y_up_limit = mean[1]+(UAV_FOOTPRINT-1)
+            y_low_limit = mean[1]-(conf.UAV_FOOTPRINT-1)
+            y_up_limit = mean[1]+(conf.UAV_FOOTPRINT-1)
             y_lower_bound = y_low_limit if y_low_limit>0 else 0
-            y_upper_bound = y_up_limit if y_up_limit<AREA_WIDTH else AREA_WIDTH
+            y_upper_bound = y_up_limit if y_up_limit<conf.AREA_WIDTH else conf.AREA_WIDTH
 
             users_x_coords = User.get_truncated_normal(mean[0], std_x, x_lower_bound, x_upper_bound, users_for_current_cluster)
             users_y_coords = User.get_truncated_normal(mean[1], std_y, y_lower_bound, y_upper_bound, users_for_current_cluster)
@@ -469,8 +475,8 @@ class User:
 
             current_point_or_cell_matrix = point_or_cell_matrix[floor(user[1])][floor(user[0])]
 
-            if (current_point_or_cell_matrix._status == OBS_IN):
-                max_achievable_height_per_user = min(current_point_or_cell_matrix._z_coord, MAX_HEIGHT_PER_USER) # The Maximum height which can be reached (i.e., it is assumed that users over a certain height are not taken into account by UAVs) by the users is the minimum between the 'MAX_HEIGHT_PER_USER' and the height of the building inside which they could be.
+            if (current_point_or_cell_matrix._status == conf.OBS_IN):
+                max_achievable_height_per_user = min(current_point_or_cell_matrix._z_coord, conf.MAX_HEIGHT_PER_USER) # The Maximum height which can be reached (i.e., it is assumed that users over a certain height are not taken into account by UAVs) by the users is the minimum between the 'MAX_HEIGHT_PER_USER' and the height of the building inside which they could be.
                 us_height = np.random.randint(0, max_achievable_height_per_user)
             else:
                 us_height = 0
@@ -487,8 +493,8 @@ class User:
 
         point_or_cell = point_or_cell_matrix[floor(user_xy[1])][floor(user_xy[0])]
 
-        if (point_or_cell._status == OBS_IN):
-            max_achievable_height_per_user = min(point_or_cell._z_coord, MAX_HEIGHT_PER_USER) # The Maximum height which can be reached by the users is the minimum between the 'MAX_HEIGHT_PER_USER' and the height of the building inside which they could be.
+        if (point_or_cell._status == conf.OBS_IN):
+            max_achievable_height_per_user = min(point_or_cell._z_coord, conf.MAX_USER_Z) # The Maximum height which can be reached by the users is the minimum between the 'conf.MAX_USER_Z' and the height of the building inside which they could be.
         else:
             max_achievable_height_per_user = 0
 
@@ -506,16 +512,16 @@ class User:
             current_user_z = users_z[user_idx]
             max_height_per_current_user = User.max_reachable_height_per_user(points_matrix, current_user_xy)
             
-            if (INF_REQUEST == True):
-                users_xyz.append( User(current_user_xy[0], current_user_xy[1], current_user_z, max_height_per_current_user, User.generate_user_account(), [False, None, ITERATIONS_PER_EPISODE, 0, 0, 0]) )
+            if (conf.INF_REQUEST == True):
+                users_xyz.append( User(current_user_xy[0], current_user_xy[1], current_user_z, max_height_per_current_user, User.generate_user_account(), [False, None, conf.ITERATIONS_PER_EPISODE, 0, 0, 0]) )
             else:
                 type_of_service = User.which_service()
                 requested_service_life = User.needed_service_life(type_of_service)
-                if (type_of_service == THROUGHPUT_REQUEST):
+                if (type_of_service == UsersServices.THROUGHPUT_REQUEST.value):
                     service_quantity = User.bitrate_request()
-                elif (type_of_service == EDGE_COMPUTING):
+                elif (type_of_service == UsersServices.EDGE_COMPUTING.value):
                     service_quantity = User.edge_computing_request()
-                elif (type_of_service == DATA_GATHERING):
+                elif (type_of_service == UsersServices.DATA_GATHERING.value):
                     service_quantity = User.data_gathering()
                 else:
                     service_quantity = 0
@@ -537,8 +543,8 @@ class User:
         go_ahead = +1
 
         # Upper bounds index of our area of interest:
-        upper_x = AREA_WIDTH-1 #CELLS_COLS
-        upper_y = AREA_HEIGHT-1 #CELLS_ROWS
+        upper_x = conf.AREA_WIDTH-1 #conf.CELLS_COLS
+        upper_y = conf.AREA_HEIGHT-1 #conf.CELLS_ROWS
 
         users_steps = []
         for user in origins:
@@ -566,8 +572,8 @@ class User:
                 
                 
                 # ___________________________________________________ Case in which the user is on the top floor of a building (or at his/her maximum height): ___________________________________________________
-                
-                elif ( (DIMENSION_2D==False) and (current_user_z == user_max_in_building) and (user_max_in_building != 0) ): # --> If there is a 2D env, this condition will be always True due to the fact that users are all at z=0, which is also their maximum reachable height.
+
+                elif ( (conf.DIMENSION_2D==False) and (current_user_z == user_max_in_building) and (user_max_in_building != 0) ): # --> If there is a 2D env, this condition will be always True due to the fact that users are all at z=0, which is also their maximum reachable height.
                     z_val = np.random.randint(go_back, stop)
                     x_val = stop
                     y_val = stop
@@ -645,7 +651,7 @@ class User:
         # ___________________________ Case in which we have set a priori the number of cluster that we want to use to group the users: ___________________________
         
         if fixed_clusters == True:
-            clusterer = KMeans(FIXED_CLUSTERS_NUM)
+            clusterer = KMeans(conf.FIXED_CLUSTERS_NUM)
             clusterer.fit(users_array)
             users_clusters = [users_array[np.where(clusterer.labels_ == i)] for i in range(clusterer.n_clusters)]
 
@@ -657,7 +663,7 @@ class User:
         else:
             optimal_clusters_num, optimal_clusterer, current_best_silhoutte_score = None, None, 1.0            
             
-            for current_cluster_num in CLUSTERS_NUM_TO_TEST:
+            for current_cluster_num in conf.CLUSTERS_NUM_TO_TEST:
                 current_clusterer = Kmeans(current_cluster_num)
                 cluster_labels = current_clusterer.fit_predict(users_array)
                 # Use the silhouette score evaluates the 'goodness' of the current number of clusters considered: 
@@ -714,11 +720,11 @@ class User:
         # Pick a random service time according to the ones available for each considered service request  #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-        if (service_to_provide == THROUGHPUT_REQUEST):
+        if (service_to_provide == UsersServices.THROUGHPUT_REQUEST.value):
             requested_service_life = np.random.choice(TR_SERVICE_TIMES)
-        elif (service_to_provide == EDGE_COMPUTING):
+        elif (service_to_provide == UsersServices.EDGE_COMPUTING.value):
             requested_service_life = EC_SERVICE_TIME
-        elif (service_to_provide == DATA_GATHERING):
+        elif (service_to_provide == UsersServices.DATA_GATHERING.value):
             requested_service_life = DG_SERVICE_TIME
         else:
             requested_service_life = 0
@@ -754,7 +760,7 @@ class User:
         # Generate a random edge-computing request among the 'available' ones in 'EDGE_COMPUTING_REQUESTS'. #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-        ec_request = np.random.choice(EDGE_COMPUTING_REQUESTS)
+        ec_request = np.random.choice(UsersServices.EDGE_COMPUTING.value_REQUESTS)
         return ec_request
 
     @staticmethod
@@ -763,7 +769,7 @@ class User:
         # Generate a random data gathering request among the 'available' ones in 'DATA_GATHERING_REQUESTS'. #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #        
         
-        dg_request = np.random.choice(DATA_GATHERING_REQUESTS)
+        dg_request = np.random.choice(UsersServices.DATA_GATHERING.value_REQUESTS)
         return dg_request
 
     def pickle_MyClass(obj):
@@ -782,26 +788,26 @@ class Environment:
     def __init__(self, area_width, area_height, area_z, cell_res_row, cell_res_col):
         self._area_width = area_width
         self._area_height = area_height
-        self._area_z = MAXIMUM_AREA_HEIGHT if DIMENSION_2D==False else 0
+        self._area_z = conf.MAXIMUM_AREA_HEIGHT if conf.DIMENSION_2D==False else 0
         self._N_points = area_width*area_height
         self._cell_res_row = cell_res_row
         self._cell_res_col = cell_res_col
-        self._cells_rows = CELLS_ROWS
-        self._cells_cols = CELLS_COLS
-        self._cells_num = N_CELLS
-        self._cs_height = CS_HEIGHT if DIMENSION_2D==False else 0
-        self._cs_num = N_CS
-        self._radial_distance_x = RADIAL_DISTANCE_X
-        self._radial_distance_y = RADIAL_DISTANCE_Y        
-        self._x_eNB = ENODEB_X
-        self._y_eNB = ENODEB_Y
-        self._z_eNB = ENODEB_Z
-        self._free = FREE
-        self._obs_in = OBS_IN
-        self._cs_in = CS_IN
-        self._uav_in = UAV_IN
-        self._enb_in = ENB_IN
-        self._hosp_in = HOSP_IN
+        self._cells_rows = conf.CELLS_ROWS
+        self._cells_cols = conf.CELLS_COLS
+        self._cells_num = conf.N_CELLS
+        self._cs_height = conf.CS_HEIGHT if conf.DIMENSION_2D==False else 0
+        self._cs_num = conf.N_CS
+        self._radial_distance_x = conf.RADIAL_DISTANCE_X
+        self._radial_distance_y = conf.RADIAL_DISTANCE_Y
+        self._x_eNB = conf.ENODEB_X
+        self._y_eNB = conf.ENODEB_Y
+        self._z_eNB = conf.ENODEB_Z
+        self._free = conf.FREE
+        self._obs_in = conf.OBS_IN
+        self._cs_in = conf.CS_IN
+        self._uav_in = conf.UAV_IN
+        self._enb_in = conf.ENB_IN
+        self._hosp_in = conf.HOSP_IN
         self._color_count = {}
 
 
@@ -833,12 +839,12 @@ class Environment:
 
         while (not candidate_found):
 
-            if (prev_row < LOWER_BOUNDS):
-                prev_row = LOWER_BOUNDS
+            if (prev_row < conf.LOWER_BOUNDS):
+                prev_row = conf.LOWER_BOUNDS
             if (next_row > matrix_row_upper_bound):
                 next_row = matrix_row_upper_bound
-            if (prev_col < LOWER_BOUNDS):
-                prev_col = LOWER_BOUNDS
+            if (prev_col < conf.LOWER_BOUNDS):
+                prev_col = conf.LOWER_BOUNDS
             if (next_col > matrix_col_upper_bound):
                 next_col = matrix_col_upper_bound
 
@@ -866,7 +872,7 @@ class Environment:
 
         return selected_position
 
-    def obstacles_generation(self, min_obs_per_area=MIN_OBS_PER_AREA, max_obs_per_area=MAX_OBS_PER_AREA, min_obs_height=MIN_OBS_HEIGHT, max_obs_height=MAX_OBS_HEIGHT):
+    def obstacles_generation(self, min_obs_per_area=conf.MIN_OBS_PER_AREA, max_obs_per_area=conf.MAX_OBS_PER_AREA, min_obs_height=conf.MIN_OBS_HEIGHT, max_obs_height=conf.MAX_OBS_HEIGHT):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Generate obstacles by computing random integers from the “discrete uniform” distribution in the closed              #
         # interval specified by the width and the height of the selected shape for the considered area. It is possible to     #
@@ -943,7 +949,7 @@ class Environment:
                     break
                 
                 else:
-                    if randomm ==True:
+                    if conf.randomm ==True:
                         hosp_prob = random()
                         if (hosp_prob > 0.5):
                             #print("hosp_pointshosp_pointshosp_points", ob)
@@ -975,7 +981,7 @@ class Environment:
 
         points_matrix = [[Point(0, j, i, 0, [], None) for j in range(self._area_width)] for i in range(self._area_height)]
         
-        if (DIMENSION_2D == False):
+        if (conf.DIMENSION_2D == False):
             for obs_point in obs_points:
                 x_current_obs = obs_point._x_coord
                 y_current_obs = obs_point._y_coord
@@ -993,7 +999,7 @@ class Environment:
 
         [CS_points.append( Point(self._cs_in, round(self._x_eNB + self._radial_distance_x*sin(CS_idx*rad_between_points)), round(self._y_eNB + self._radial_distance_y*cos(CS_idx*rad_between_points)), self._cs_height, [], None) ) for CS_idx in range(self._cs_num)]
         
-        if (UNLIMITED_BATTERY == False):
+        if (conf.UNLIMITED_BATTERY == False):
             for CS_point in CS_points:
                 x_current_CS = CS_point._x_coord
                 y_current_CS = CS_point._y_coord
@@ -1003,13 +1009,13 @@ class Environment:
                 # ________________ SIDE-EFFECT on 'points_matrix': ________________
 
                 # If the selected map position is FREE, then that position will be occupied by a CS.
-                if (current_position_on_map_status == FREE):
+                if (current_position_on_map_status == conf.FREE):
                     points_matrix[y_current_CS][x_current_CS] = CS_point
                 
                 # Otherwise, namely if an obstacle or an hospital is in here, the CS will be placed on that obstacle by keeping the height of the obstacle;
                 # In this case the obstacle will be removed from 'obs_points' list (just for a plotting matter).
-                elif ( (current_position_on_map_status == OBS_IN) ):
-                    points_matrix[y_current_CS][x_current_CS]._status = CS_IN
+                elif ( (current_position_on_map_status == conf.OBS_IN) ):
+                    points_matrix[y_current_CS][x_current_CS]._status = conf.CS_IN
 
                     for obs in obs_points:
                         
@@ -1024,17 +1030,17 @@ class Environment:
         # Set eNodeB on map (represented by 'points_matrix'). #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-        if (CREATE_ENODEB == False):
+        if (conf.CREATE_ENODEB == False):
             return []
 
         current_position_on_map_status = points_matrix[self._y_eNB][self._x_eNB]._status
-        if (current_position_on_map_status == FREE):
+        if (current_position_on_map_status == conf.FREE):
             z_enb = self._z_eNB
         
         # If the desired position for the eNodeB is occupied by an obstacle (or hospital), then use the height of the obstacle (or hospital) as eNodeB height:
-        elif ( (current_position_on_map_status == OBS_IN) or (current_position_on_map_status == HOSP_IN) ):
+        elif ( (current_position_on_map_status == conf.OBS_IN) or (current_position_on_map_status == conf.HOSP_IN) ):
             z_enb = points_matrix[self._y_eNB][self._x_eNB]._z_coord
-            points_matrix[self._y_eNB][self._x_eNB]._status = HOSP_AND_ENB_IN
+            points_matrix[self._y_eNB][self._x_eNB]._status = HOSP_AND_conf.ENB_IN
 
         for obs in obs_points:
             if ( (obs._x_coord == self._x_eNB) and (obs._y_coord == self._y_eNB) ):
@@ -1044,7 +1050,7 @@ class Environment:
         eNB_point = []
         eNB_point.append(Point(self._enb_in, self._x_eNB, self._y_eNB, z_enb, [], None) )
 
-        if (CREATE_ENODEB == True):
+        if (conf.CREATE_ENODEB == True):
             points_matrix[self._y_eNB][self._x_eNB] = eNB_point[0]
         # Otherwise eNodeB will not set on map, but its coordinates will be used to spread the Charging Stations around the centre of the map. 
 
@@ -1088,9 +1094,9 @@ class Environment:
                 else:
                     receiver = None
                 
-                if (DIMENSION_2D == True):
-                    if (UNLIMITED_BATTERY == True):
-                        if (HOSP_SCENARIO==False):
+                if (conf.DIMENSION_2D == True):
+                    if (conf.UNLIMITED_BATTERY == True):
+                        if (conf.HOSP_SCENARIO==False):
                             cells_matrix[i][j] = Cell(self._free, current_points, j, i, 0, [], priority_type)
                         else:
                             if (self._hosp_in in status_points):
@@ -1104,7 +1110,7 @@ class Environment:
                                 z_current_cell = self._cs_height
                                 cells_matrix[i][j] = Cell(current_cell_status, current_points, j, i, z_current_cell, [], priority_type)
                         else:
-                            if (HOSP_SCENARIO==False):
+                            if (conf.HOSP_SCENARIO==False):
                                 cells_matrix[i][j] = Cell(self._free, current_points, j, i, 0, [], priority_type)
                             else:
                                 if (self._hosp_in in status_points):
@@ -1147,7 +1153,7 @@ class Environment:
         # this function is used to shape the cell in such a way to be plotted.              #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-        desired_cells = [[(cells_matrix[i][j] if cells_matrix[i][j]._status == which_cell_type else None) for j in range(CELLS_COLS)] for i in range(CELLS_ROWS)]
+        desired_cells = [[(cells_matrix[i][j] if cells_matrix[i][j]._status == which_cell_type else None) for j in range(conf.CELLS_COLS)] for i in range(conf.CELLS_ROWS)]
         desired_cells = list(np.array(desired_cells).flatten())
         desired_cells = list(filter(lambda a: a != None, desired_cells))
 
@@ -1163,21 +1169,23 @@ if __name__ == '__main__':
 
     # ___________________________________________________ Area of interest creation: ___________________________________________________
 
-    env = Environment(AREA_WIDTH, AREA_HEIGHT, MAXIMUM_AREA_HEIGHT, CELL_RESOLUTION_PER_ROW, CELL_RESOLUTION_PER_COL)
+    env = Environment(conf.AREA_WIDTH, conf.AREA_HEIGHT, conf.MAXIMUM_AREA_HEIGHT, conf.CELL_RESOLUTION_PER_ROW, conf.CELL_RESOLUTION_PER_COL)
     obs_points = env.obstacles_generation()
     points_matrix = env.set_obstacles_on_map(obs_points)
     CS_points = env.set_CS_on_map(points_matrix, obs_points)
     eNB_point = env.set_eNB_on_map(points_matrix, obs_points)
-    hosp_points = env.set_hospitals_on_map(N_HOSP, points_matrix, obs_points) if HOSP_SCENARIO==True else None
-    all_priorities_points = Priority.hosp_priority(hosp_points, points_matrix) if HOSP_SCENARIO == True else None
+    hosp_points = env.set_hospitals_on_map(conf.N_HOSP, points_matrix, obs_points) if conf.HOSP_SCENARIO==True else None
+    all_priorities_points = Priority.hosp_priority(hosp_points, points_matrix) if conf.HOSP_SCENARIO == True else None
 
     # __________________________________________________________________________________________________________________________________
 
     # ___________________________________________________ Users creation: ______________________________________________________________
 
     us = User
-    centroids = us.centroids_user_cluster_generation(CENTROIDS_MIN_MAX_COORDS, FIXED_CLUSTERS_NUM) # --> You can change these arguments to get clusters spread out in a different way
-    users_clusters, users_xy = us.spread_users_around_clusters(centroids, 1, 1, 8, 16) # --> # --> You can change these arguments to get users spread out in a different way among clusters; you can change also the MIN and MAX users number per cluster
+    centroids = us.centroids_user_cluster_generation(conf.CENTROIDS_MIN_MAX_COORDS,
+                                                     conf.FIXED_CLUSTERS_NUM)  # --> You can change these arguments to get clusters spread out in a different way
+    users_clusters, users_xy = us.spread_users_around_clusters(centroids, 1, 1, 8,
+                                                               16)  # --> # --> You can change these arguments to get users spread out in a different way among clusters; you can change also the MIN and MAX users number per cluster
     occurrences = [users_xy.count(user) for user in users_xy]
     users_points_heights = us.users_heights(points_matrix, users_xy)
     n_users = len(users_xy)
@@ -1189,29 +1197,30 @@ if __name__ == '__main__':
     initial_centroids_aux = []
     values_to_check = []
 
-    for centroid_idx in range(FIXED_CLUSTERS_NUM):
+    for centroid_idx in range(conf.FIXED_CLUSTERS_NUM):
 
-        for initial_centroid_idx in range(FIXED_CLUSTERS_NUM):
-            value_to_check1 = abs(centroids[centroid_idx][0]-initial_centroids[initial_centroid_idx][0])
-            value_to_check2 = abs(centroids[centroid_idx][1]-initial_centroids[initial_centroid_idx][1])
+        for initial_centroid_idx in range(conf.FIXED_CLUSTERS_NUM):
+            value_to_check1 = abs(centroids[centroid_idx][0] - initial_centroids[initial_centroid_idx][0])
+            value_to_check2 = abs(centroids[centroid_idx][1] - initial_centroids[initial_centroid_idx][1])
 
-            if ( (value_to_check1 < 2) and (value_to_check2 < 2) ):
+            if ((value_to_check1 < 2) and (value_to_check2 < 2)):
                 initial_centroids_aux.append(initial_centroids[initial_centroid_idx])
 
     initial_centroids = initial_centroids_aux
 
-    initial_clusters_radiuses = us.actual_clusters_radiuses(initial_centroids, users_clusters, FIXED_CLUSTERS_NUM) # --> You can change the clusters number if you want to detect them dinamically
+    initial_clusters_radiuses = us.actual_clusters_radiuses(initial_centroids, users_clusters,
+                                                            conf.FIXED_CLUSTERS_NUM)  # --> You can change the clusters number if you want to detect them dinamically
 
-    if (CREATE_ENODEB == False):
+    if (conf.CREATE_ENODEB == False):
         eNB_point_z_coord = eNB_point
     else:
         eNB_point_z_coord = eNB_point[0]._z_coord
 
-    cells_matrix = env.compute_cell_matrix(points_matrix, eNB_point_z_coord, env._area_width, env._area_height, env._cell_res_row, env._cell_res_col)
+    cells_matrix = env.compute_cell_matrix(points_matrix, eNB_point_z_coord, env._area_width, env._area_height,
+                                           env._cell_res_row, env._cell_res_col)
 
     # __________________________________________________________________________________________________________________________________
 
-    
     # ___________________________________________ Extracting coordinates: ___________________________________________
 
     # Extracting cells coordinates which contain obstacles:
@@ -1221,10 +1230,10 @@ if __name__ == '__main__':
     # Extracting cells coordinates which contain eNodeB:
     eNB_cells = env.extracting_specific_cells_coordinates(cells_matrix, env._enb_in)
     # Extracting cells coordinates which contain eNodeB:
-    hosp_cells = env.extracting_specific_cells_coordinates(cells_matrix, env._hosp_in) if HOSP_SCENARIO==True else None
-    all_priorities_cells = Priority.hosp_priority(hosp_cells, cells_matrix, points=False) if HOSP_SCENARIO == True else None
+    hosp_cells = env.extracting_specific_cells_coordinates(cells_matrix, env._hosp_in) if conf.HOSP_SCENARIO == True else None
+    all_priorities_cells = Priority.hosp_priority(hosp_cells, cells_matrix, points=False) if conf.HOSP_SCENARIO == True else None
     # ______________________________________________________________________________________________________________
-    if HOSP_SCENARIO == True:
+    if conf.HOSP_SCENARIO == True:
         CS_points = []
         cs_cells = []
         obs_points = []
@@ -1234,11 +1243,11 @@ if __name__ == '__main__':
         initial_usr_clusters = []
         eNB_cells = []
         eNB_point = []
-    #print(eNB_point, CS_points, obs_points, obs_cells, cs_cells, eNB_cells)
+    # print(eNB_point, CS_points, obs_points, obs_cells, cs_cells, eNB_cells)
 
     print("Scenario created.")
-    print("ABBIAMO ", len(obs_points), "OSTACOLI")
-    
+    print("Generated obstacles:", len(obs_points))
+
     # ___________________________________________ Directory Creation and Saving: ___________________________________________
 
     # Create the directories 'map_data' and 'initial_users' to save data:
@@ -1252,13 +1261,14 @@ if __name__ == '__main__':
     #if HOSP_SCENARIO == False:
     saver.users_clusters(users_xyz, initial_centroids, initial_clusters_radiuses, initial_clusterer, initial_usr_clusters)
 
-    if HOSP_SCENARIO == True:
+    if conf.HOSP_SCENARIO == True:
         print("PUNTI:")
         for p in hosp_points:
-            print(p._x_coord, p._y_coord, p.receiver, get_color_name(p._priority))
+            print(p._x_coord, p._y_coord, p.receiver, hosp_f.get_color_name(p._priority))
         print("CELLE:")
         for c in hosp_cells:
-            print(c._x_coord, c._y_coord, c.receiver, get_color_name(c._priority))
+            print(c._x_coord, c._y_coord, c.receiver, hosp_f.get_color_name(c._priority))
 
     # _______________________________________________________________________________________________________________________
-
+    print()
+    print(conf.summary())

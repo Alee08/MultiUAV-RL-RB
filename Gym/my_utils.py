@@ -7,7 +7,7 @@ import csv
 from os import mkdir
 from os.path import join, isdir
 from datetime import datetime
-from iter import j
+#from iter import j
 import os
 import ast
 

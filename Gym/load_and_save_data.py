@@ -4,10 +4,13 @@ import pickle
 from os import mkdir
 from os.path import join, isdir
 import numpy as np
-from my_utils import *
+from configuration import Config
+from settings.dir_gen import *
 #from scenario_objects import Point, Cell, User
 import copyreg
 import scenario_objects
+
+conf = Config()
 
 class Directories:
     '''
@@ -50,7 +53,7 @@ class Loader(object):
             self._points_matrix = pickle.load(f)
         with open(join(MAP_DATA_DIR, ENODEB_POINT), "rb") as f:
             self._eNB_point = pickle.load(f)
-        if (HOSP_SCENARIO==True):
+        if (conf.HOSP_SCENARIO==True):
             with open(join(MAP_DATA_DIR, HOSP_POINTS), "rb") as f:
                 self._hosp_points = pickle.load(f)
         
@@ -62,7 +65,7 @@ class Loader(object):
             self._cs_cells = pickle.load(f)
         with open(join(MAP_DATA_DIR, ENB_CELLS), "rb") as f:
             self._enb_cells = pickle.load(f)
-        if (HOSP_SCENARIO==True):
+        if (conf.HOSP_SCENARIO==True):
             with open(join(MAP_DATA_DIR, HOSP_CELLS), "rb") as f:
                 self._hosp_cells = pickle.load(f)
             with open(join(MAP_DATA_DIR, PRIORITIES_POINTS), "rb") as f:
@@ -113,12 +116,12 @@ class Loader(object):
 
     @property
     def hosp_points(self):
-        if (HOSP_SCENARIO==True):
+        if (conf.HOSP_SCENARIO==True):
             return self._hosp_points
 
     @property
     def all_priorities_points(self):
-        if (HOSP_SCENARIO==True):
+        if (conf.HOSP_SCENARIO==True):
             return self._all_priorities_points
 
     # Cells:
@@ -140,12 +143,12 @@ class Loader(object):
 
     @property
     def hosp_cells(self):
-        if (HOSP_SCENARIO==True):
+        if (conf.HOSP_SCENARIO==True):
             return self._hosp_cells
 
     @property
     def all_priorities_cells(self):
-        if (HOSP_SCENARIO==True):
+        if (conf.HOSP_SCENARIO==True):
             return self._all_priorities_cells
 
     # Status:

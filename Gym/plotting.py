@@ -11,14 +11,19 @@ import matplotlib.patches as mpatches
 import matplotlib.lines as mlines
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from decimal import Decimal
-from my_utils import *
+from configuration import Config
+from configuration import j
+from settings.colors import Colors
 from load_and_save_data import *
 from scenario_objects import Point, Cell, User, Priority
 import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib import animation
 from statistics import stdev
-from iter import j
+#from iter import j
 
+
+conf = Config()
+clrs = Colors()
 
 # If EnodeB has not been created in 'scenario_objets', then if you try to plot it, it will obviously raise an Error.
 
@@ -32,11 +37,11 @@ MAX_CLUSTERS_COLORS = 20  # --> It is used to generate 20 different colors for 2
 PLOT_EACH_N_EPOCH = 200
 CONSTANT_FOR_LABELS = 10
 LABELS_EACH_N_EPOCH = PLOT_EACH_N_EPOCH * CONSTANT_FOR_LABELS
-RANGE_EPOCHS_TO_PLOT = range(0, EPISODES + 1, PLOT_EACH_N_EPOCH)
-RANGE_EPOCHS_TO_VISUALIZE = range(0, EPISODES + 1, LABELS_EACH_N_EPOCH)
-RANGE_X_TICKS = range(0, EPISODES + 1, LABELS_EACH_N_EPOCH)
+RANGE_EPOCHS_TO_PLOT = range(0, conf.EPISODES + 1, PLOT_EACH_N_EPOCH)
+RANGE_EPOCHS_TO_VISUALIZE = range(0, conf.EPISODES + 1, LABELS_EACH_N_EPOCH)
+RANGE_X_TICKS = range(0, conf.EPISODES + 1, LABELS_EACH_N_EPOCH)
 
-if MIDDLE_CELL_ASSUMPTION == True:
+if conf.MIDDLE_CELL_ASSUMPTION == True:
     incr_assumed_coord = 0.5
 else:
     incr_assumed_coord = 0.0
@@ -72,11 +77,11 @@ class Plot:
             line.set_markersize(16)
 
             circles[circle_idx].remove()
-            x = (data[1, num]) + ACTUAL_UAV_FOOTPRINT * np.outer(np.cos(u), np.sin(v))
-            y = (data[0, num]) + ACTUAL_UAV_FOOTPRINT * np.outer(np.sin(u), np.sin(v))
+            x = (data[1, num]) + conf.ACTUAL_UAV_FOOTPRINT * np.outer(np.cos(u), np.sin(v))
+            y = (data[0, num]) + conf.ACTUAL_UAV_FOOTPRINT * np.outer(np.sin(u), np.sin(v))
             z = 0 * np.outer(np.ones(np.size(u)), np.cos(v))
 
-            surf = ax.plot_surface(x, y, z, color=UAVS_COLORS[circle_idx], alpha=0.18, linewidth=0)
+            surf = ax.plot_surface(x, y, z, color=clrs.UAVS_COLORS[circle_idx], alpha=0.18, linewidth=0)
             circles[circle_idx] = surf
 
         return tuple(lines) + tuple(circles)
@@ -120,14 +125,14 @@ class Plot:
                 current_cell = cells_matrix[r][c]
                 current_cell_status = current_cell._status
 
-                if (current_cell_status == OBS_IN):
-                    value_to_assign = OBS_IN
-                elif (current_cell_status == CS_IN):
-                    value_to_assign = CS_IN
-                elif (current_cell_status == ENB_IN):
-                    value_to_assign = ENB_IN
+                if (current_cell_status == conf.OBS_IN):
+                    value_to_assign = conf.OBS_IN
+                elif (current_cell_status == conf.CS_IN):
+                    value_to_assign = conf.CS_IN
+                elif (current_cell_status == conf.ENB_IN):
+                    value_to_assign = conf.ENB_IN
                 else:
-                    value_to_assign = FREE
+                    value_to_assign = conf.FREE
 
                 for point in current_cell._points:
                     perceived_status_matrix[point._y_coord][point._x_coord] = value_to_assign
@@ -254,16 +259,15 @@ class Plot:
         HOSP_2_CIRCLE = mlines.Line2D([], [], color=PURPLE, marker='o', markersize=15, label="Priority 2")
         HOSP_3_CIRCLE = mlines.Line2D([], [], color=P_ORANGE, marker='o', markersize=15, label="Priority 3")
         HOSP_4_CIRCLE = mlines.Line2D([], [], color=P_BROWN, marker='o', markersize=15, label="Priority 4")'''
-        HOSP_CIRCLES = [mlines.Line2D([], [], color=HOSP_PRIORITIES[i], marker='o', markersize=15, label="Goal 2 " ) if i % 2 == 0 else mlines.Line2D([], [], color=HOSP_PRIORITIES[i], marker='o', markersize=15, label="Goal 1 " )
-            for i in range(1, N_HOSP + 1)]
-
-            #mlines.Line2D([], [], color=HOSP_PRIORITIES[i], marker='o', markersize=15, label="Priority " + str(i + 1))
-            #for i in range(1, N_HOSP + 1)]
+        HOSP_CIRCLES = [mlines.Line2D([], [], color=conf.HOSP_PRIORITIES[i], marker='o', markersize=15, label="Goal 2 " ) if i % 2 == 0 else mlines.Line2D([], [], color=conf.HOSP_PRIORITIES[i], marker='o', markersize=15, label="Goal 1 " )
+            for i in range(1, conf.N_HOSP_TOT + 1)]
+            #mlines.Line2D([], [], color=conf.HOSP_PRIORITIES[i], marker='o', markersize=15, label="Priority " + str(i + 1))
+            #for i in range(1, conf.N_HOSP + 1)]
 
         # The following 'magic' number represent the RGBA values for charging stations and obstacles:
-        cs_cells_colors = [(0.4, 1, 0.59, 0.3) for i in range(N_CS)]
+        cs_cells_colors = [(0.4, 1, 0.59, 0.3) for i in range(conf.N_CS)]
         obs_cells_colors = [(0.4, 1, 1, 0.3) for i in range(len(obs_cells))]
-        if (HOSP_SCENARIO == True):
+        if (conf.HOSP_SCENARIO == True):
             hosp_cells_colors = [(1, 0, 0, 0.3) for i in range(len(hosp_cells))]
 
         bottom = 0
@@ -274,16 +278,16 @@ class Plot:
 
         if path_animation == True:
 
-            if (CREATE_ENODEB == True):
+            if (conf.CREATE_ENODEB == True):
                 colors = [WHITE, LIGHT_BLUE, LIGHT_GREEN, LIGHT_RED]
             else:
-                if (DIMENSION_2D == False):
-                    if (HOSP_SCENARIO == False):
+                if (conf.DIMENSION_2D == False):
+                    if (conf.HOSP_SCENARIO == False):
                         colors = [WHITE, LIGHT_BLUE, LIGHT_GREEN]
                     else:
                         colors = [WHITE, LIGHT_BLUE, LIGHT_GREEN, LIGHT_RED]
                 else:
-                    if (HOSP_SCENARIO == False):
+                    if (conf.HOSP_SCENARIO == False):
                         colors = [WHITE, LIGHT_GREEN]
                     else:
                         colors = [WHITE, LIGHT_GREEN, LIGHT_RED]
@@ -291,29 +295,29 @@ class Plot:
 
             fig = plt.figure('Cells')
 
-            if (DIMENSION_2D == False):
+            if (conf.DIMENSION_2D == False):
                 ax = fig.add_subplot(111, projection='3d')
                 # ax = p3.Axes3D(fig)
                 ax.view_init(elev=60, azim=40)
-                if (UNLIMITED_BATTERY == True):
+                if (conf.UNLIMITED_BATTERY == True):
                     cells_status_matrix_un_bat = [
-                        [FREE if cells_status_matrix[r][c] == CS_IN else cells_status_matrix[r][c] for c in
+                        [conf.FREE if cells_status_matrix[r][c] == conf.CS_IN else cells_status_matrix[r][c] for c in
                          range(N_cells_col)] for r in range(N_cells_row)]
                     cells_status_matrix = cells_status_matrix_un_bat
             else:
                 ax = fig.add_subplot(111)
-                if (UNLIMITED_BATTERY == True):
-                    cells_status_matrix_2D = [[FREE if cells_status_matrix[r][c] == OBS_IN or cells_status_matrix[r][
-                        c] == CS_IN else cells_status_matrix[r][c] for c in range(N_cells_col)] for r in
+                if (conf.UNLIMITED_BATTERY == True):
+                    cells_status_matrix_2D = [[conf.FREE if cells_status_matrix[r][c] == conf.OBS_IN or cells_status_matrix[r][
+                        c] == conf.CS_IN else cells_status_matrix[r][c] for c in range(N_cells_col)] for r in
                                               range(N_cells_row)]
                     cells_status_matrix = cells_status_matrix_2D
                 else:
                     cells_status_matrix_2D = [
-                        [FREE if cells_status_matrix[r][c] == OBS_IN else cells_status_matrix[r][c] for c in
+                        [conf.FREE if cells_status_matrix[r][c] == conf.OBS_IN else cells_status_matrix[r][c] for c in
                          range(N_cells_col)] for r in range(N_cells_row)]
                     cells_status_matrix = cells_status_matrix_2D
 
-            if (HOSP_SCENARIO == False):
+            if (conf.HOSP_SCENARIO == False):
                 users_x, users_y, users_z = self.extract_coord_from_xyz(users)
                 users_x_for_2DplotCells, users_y_for_2DplotCells = [float(x) - 0.5 for x in users_x], [float(y) - 0.5
                                                                                                        for y in users_y]
@@ -330,21 +334,21 @@ class Plot:
 
             x_obs_cells, y_obs_cells, z_obs_cells = self.extract_coord_from_xyz(obs_cells)
             x_cs_cells, y_cs_cells, z_cs_cells = self.extract_coord_from_xyz(cs_cells)
-            if (HOSP_SCENARIO == True):
+            if (conf.HOSP_SCENARIO == True):
                 x_hosp_cells, y_hosp_cells, z_hosp_cells = self.extract_coord_from_xyz(hosp_cells)
 
-            if (CREATE_ENODEB == True):
+            if (conf.CREATE_ENODEB == True):
                 x_eNB_cells, y_eNB_cells, z_eNB_cells = self.extract_coord_from_xyz(enb_cells)
 
-            if (DIMENSION_2D == False):
-                if (HOSP_SCENARIO == False):
+            if (conf.DIMENSION_2D == False):
+                if (conf.HOSP_SCENARIO == False):
                     ax.scatter(users_y_for_3DplotCells, users_x_for_3DplotCells, users_z_for_3DplotCells, s=10, c=GOLD)
                     for cluster_idx in self.num_color_range:
-                        patch = plt.Circle([centroids[cluster_idx][1] / CELL_RESOLUTION_PER_COL + 0.25,
-                                            centroids[cluster_idx][0] / CELL_RESOLUTION_PER_ROW + 0.25,
+                        patch = plt.Circle([centroids[cluster_idx][1] / conf.CELL_RESOLUTION_PER_COL + 0.25,
+                                            centroids[cluster_idx][0] / conf.CELL_RESOLUTION_PER_ROW + 0.25,
                                             centroids[cluster_idx][2]], (float(
-                            clusters_radiuses[cluster_idx] / (CELL_RESOLUTION_PER_ROW)) + float(
-                            clusters_radiuses[cluster_idx] / (CELL_RESOLUTION_PER_COL))) / 2,
+                            clusters_radiuses[cluster_idx] / (conf.CELL_RESOLUTION_PER_ROW)) + float(
+                            clusters_radiuses[cluster_idx] / (conf.CELL_RESOLUTION_PER_COL))) / 2,
                                            color=self.clusters_colors[cluster_idx], fill=False)
                         ax.add_patch(patch)
                         art3d.pathpatch_2d_to_3d(patch)
@@ -352,18 +356,18 @@ class Plot:
 
                 ax.bar3d(y_obs_cells, x_obs_cells, bottom, width, depth, z_obs_cells, shade=True,
                          color=obs_cells_colors, edgecolor="none")
-                if (HOSP_SCENARIO == True):
+                if (conf.HOSP_SCENARIO == True):
                     ax.bar3d(y_hosp_cells, x_hosp_cells, bottom, width, depth, z_hosp_cells, shade=True,
                              color=hosp_cells_colors, edgecolor="none")
-                if (UNLIMITED_BATTERY == False):
+                if (conf.UNLIMITED_BATTERY == False):
                     ax.bar3d(y_cs_cells, x_cs_cells, bottom, width, depth, z_cs_cells, shade=True,
                              color=cs_cells_colors, edgecolor="none")
-                if (CREATE_ENODEB == True):
+                if (conf.CREATE_ENODEB == True):
                     ax.bar3d(y_eNB_cells, x_eNB_cells, bottom, width, depth, z_eNB_cells, shade=True,
                              color=(0.5, 0, 0, 0.3), edgecolor="none")
 
-                ax.set_xlim(xmin=0, xmax=CELLS_COLS)
-                ax.set_ylim(ymin=CELLS_ROWS, ymax=0)  # --> I want to set 0 in the bottom part of the 2D plane-grid.
+                ax.set_xlim(xmin=0, xmax=conf.CELLS_COLS)
+                ax.set_ylim(ymin=conf.CELLS_ROWS, ymax=0)  # --> I want to set 0 in the bottom part of the 2D plane-grid.
                 ax.set_zlim(zmin=0)
                 ax.set_title('3D Animation')
 
@@ -378,49 +382,49 @@ class Plot:
                 ax.set_yticklabels(np.arange(0, area_height + 1, 1))
 
                 ax.grid(which='major')
-                if (HOSP_SCENARIO == False):
+                if (conf.HOSP_SCENARIO == False):
                     ax.scatter(users_x_for_2DplotCells, users_y_for_2DplotCells, s=10, c=GOLD)
 
                 # A Graphical approximation is needed in order to get a cluster in 'cells view' which is as closest as possible to the one in 'points view' (The approximation is only graphical):
-                if (HOSP_SCENARIO == False):
+                if (conf.HOSP_SCENARIO == False):
                     for cluster_idx in self.num_color_range:
-                        [ax.add_artist(plt.Circle([centroids[cluster_idx][0] / CELL_RESOLUTION_PER_ROW - 0.25,
-                                                   centroids[cluster_idx][1] / CELL_RESOLUTION_PER_COL - 0.25,
+                        [ax.add_artist(plt.Circle([centroids[cluster_idx][0] / conf.CELL_RESOLUTION_PER_ROW - 0.25,
+                                                   centroids[cluster_idx][1] / conf.CELL_RESOLUTION_PER_COL - 0.25,
                                                    centroids[cluster_idx][2]], (float(
-                            clusters_radiuses[cluster_idx] / (CELL_RESOLUTION_PER_ROW)) + float(
-                            clusters_radiuses[cluster_idx] / (CELL_RESOLUTION_PER_COL))) / 2,
+                            clusters_radiuses[cluster_idx] / (conf.CELL_RESOLUTION_PER_ROW)) + float(
+                            clusters_radiuses[cluster_idx] / (conf.CELL_RESOLUTION_PER_COL))) / 2,
                                                   color=self.clusters_colors[cluster_idx], fill=False)) for cluster_idx
                          in self.num_color_range]
 
-                ax.set_xlim(xmin=0 - 0.5, xmax=CELLS_COLS + 0.5)
-                ax.set_ylim(ymin=CELLS_ROWS + 0.5, ymax=0 - 0.5)
+                ax.set_xlim(xmin=0 - 0.5, xmax=conf.CELLS_COLS + 0.5)
+                ax.set_ylim(ymin=conf.CELLS_ROWS + 0.5, ymax=0 - 0.5)
                 ax.set_title('2D Animation')
 
-            if (CREATE_ENODEB == True):
+            if (conf.CREATE_ENODEB == True):
                 fig.legend(handles=[LIGHT_BLUE_square, LIGHT_GREEN_square, LIGHT_RED_square, GOLD_circle])
             else:
-                if (DIMENSION_2D == False):
-                    ax.set_xlim(xmin=0, xmax=CELLS_COLS)
-                    ax.set_ylim(ymin=0, ymax=CELLS_ROWS)
-                    if (UNLIMITED_BATTERY == True):
-                        fig.legend(handles=[LIGHT_BLUE_square, GOLD_circle]) if HOSP_SCENARIO == False else fig.legend(
+                if (conf.DIMENSION_2D == False):
+                    ax.set_xlim(xmin=0, xmax=conf.CELLS_COLS)
+                    ax.set_ylim(ymin=0, ymax=conf.CELLS_ROWS)
+                    if (conf.UNLIMITED_BATTERY == True):
+                        fig.legend(handles=[LIGHT_BLUE_square, GOLD_circle]) if conf.HOSP_SCENARIO == False else fig.legend(
                             handles=[LIGHT_BLUE_square, LIGHT_RED_square] + HOSP_CIRCLES)
                     else:
                         fig.legend(handles=[LIGHT_BLUE_square, LIGHT_GREEN_square,
-                                            GOLD_circle]) if HOSP_SCENARIO == False else fig.legend(
+                                            GOLD_circle]) if conf.HOSP_SCENARIO == False else fig.legend(
                             handles=[LIGHT_BLUE_square, LIGHT_GREEN_square, LIGHT_RED_square] + HOSP_CIRCLES)
                 else:
-                    if (UNLIMITED_BATTERY == True):
-                        fig.legend(handles=[GOLD_circle]) if (HOSP_SCENARIO == False) else fig.legend(
+                    if (conf.UNLIMITED_BATTERY == True):
+                        fig.legend(handles=[GOLD_circle]) if (conf.HOSP_SCENARIO == False) else fig.legend(
                             handles=[LIGHT_RED_square] + HOSP_CIRCLES)
                     else:
-                        fig.legend(handles=[LIGHT_GREEN_square, GOLD_circle]) if HOSP_SCENARIO == False else fig.legend(
+                        fig.legend(handles=[LIGHT_GREEN_square, GOLD_circle]) if conf.HOSP_SCENARIO == False else fig.legend(
                             handles=[LIGHT_GREEN_square, LIGHT_RED_square] + HOSP_CIRCLES)
 
             data_path = []
 
             for path in agents_paths:
-                if (DIMENSION_2D == False):
+                if (conf.DIMENSION_2D == False):
                     path_x, path_y, path_z = [np.array(coords[0]) for coords in path], [np.array(coords[1]) for coords
                                                                                         in path], [np.array(coords[2])
                                                                                                    for coords in path]
@@ -430,28 +434,28 @@ class Plot:
                     data_path.append([path_x, path_y])
 
             data_path = np.array(data_path)
-            print("UUUUUUUUUEEEEEEEEEEEEE: ", type(data_path))
+            '''print("UUUUUUUUUEEEEEEEEEEEEE: ", type(data_path))
             print("\n\n\n")
-            print("AOOOOOOOOOOOOOOOOOOOOO: ", type(data_path[0]))
+            print("AOOOOOOOOOOOOOOOOOOOOO: ", type(data_path[0]))'''
 
             lines = []
             circles = []
             uav_color_count = 0
 
-            if (DIMENSION_2D == False):
-                x = ACTUAL_UAV_FOOTPRINT * np.outer(np.cos(u), np.sin(v))
-                y = ACTUAL_UAV_FOOTPRINT * np.outer(np.sin(u), np.sin(v))
+            if (conf.DIMENSION_2D == False):
+                x = conf.ACTUAL_UAV_FOOTPRINT * np.outer(np.cos(u), np.sin(v))
+                y = conf.ACTUAL_UAV_FOOTPRINT * np.outer(np.sin(u), np.sin(v))
                 z = 0 * np.outer(np.ones(np.size(u)), np.cos(v))
                 for path in data_path:
                     lines.append(
-                        ax.plot(path[1, 0:1], path[0, 0:1], path[2, 0:1], color=UAVS_COLORS[uav_color_count])[0])
-                    circles.append(ax.plot_surface(x, y, z, color=UAVS_COLORS[uav_color_count], linewidth=0))
+                        ax.plot(path[1, 0:1], path[0, 0:1], path[2, 0:1], color=clrs.UAVS_COLORS[uav_color_count])[0])
+                    circles.append(ax.plot_surface(x, y, z, color=clrs.UAVS_COLORS[uav_color_count], linewidth=0))
                     uav_color_count += 1
             else:
                 for path in data_path:
-                    lines.append(ax.plot(path[0, 0:1], path[1, 0:1], color=UAVS_COLORS[uav_color_count])[0])
-                    circles.append(plt.Circle(xy=(path[0, 0:1], path[1, 0:1]), radius=ACTUAL_UAV_FOOTPRINT,
-                                              color=UAVS_COLORS[uav_color_count], fill=True, alpha=0.18))
+                    lines.append(ax.plot(path[0, 0:1], path[1, 0:1], color=clrs.UAVS_COLORS[uav_color_count])[0])
+                    circles.append(plt.Circle(xy=(path[0, 0:1], path[1, 0:1]), radius=conf.ACTUAL_UAV_FOOTPRINT,
+                                              color=clrs.UAVS_COLORS[uav_color_count], fill=True, alpha=0.18))
                     uav_color_count += 1
                 for patch in circles:
                     ax.add_patch(patch)
@@ -472,7 +476,7 @@ class Plot:
             # print("FRAMEEEEEEEEEEEEEEEEEEEEEEE: ", animation_frames)
             # print("LINESSSSSSSSSSSSSSSSSSSSSSS: ", lines)
 
-            if (DIMENSION_2D == False):
+            if (conf.DIMENSION_2D == False):
                 n_circles_range = range(len(circles))
                 ani = animation.FuncAnimation(fig, self.update_animation_3D, frames=animation_frames,
                                               fargs=(data_path, lines, circles, n_circles_range, ax), interval=100,
@@ -481,7 +485,7 @@ class Plot:
                 ani = animation.FuncAnimation(fig, self.update_animation_2D, frames=animation_frames,
                                               fargs=(data_path, lines, circles), interval=100, blit=True, repeat=True)
 
-            if (DIMENSION_2D == False):
+            if (conf.DIMENSION_2D == False):
                 ax.set_zlim(zmin=0)
 
             if ((where_to_save != None) and (episode != None)):
@@ -499,75 +503,79 @@ class Plot:
 
             x_obs_points, y_obs_points, z_obs_points = self.extract_coord_from_xyz(obs_points)
             x_cs_points, y_cs_points, z_cs_points = self.extract_coord_from_xyz(cs_points)
-            if HOSP_SCENARIO == True:
+            if conf.HOSP_SCENARIO == True:
                 x_hosp_points, y_hosp_points, z_hosp_points = self.extract_coord_from_xyz(hosp_points)
 
-            if (CREATE_ENODEB == True):
+            if (conf.CREATE_ENODEB == True):
                 x_enb_point, y_enb_point, z_enb_point = self.extract_coord_from_xyz(enb_point)
             x_obs_cells, y_obs_cells, z_obs_cells = self.extract_coord_from_xyz(obs_cells)
-            if (HOSP_SCENARIO == True):
+            if (conf.HOSP_SCENARIO == True):
                 x_hosp_cells, y_hosp_cells, z_hosp_cells = self.extract_coord_from_xyz(hosp_cells)
 
             x_cs_cells, y_cs_cells, z_cs_cells = self.extract_coord_from_xyz(cs_cells)
-            if (CREATE_ENODEB == True):
+            if (conf.CREATE_ENODEB == True):
                 x_eNB_cells, y_eNB_cells, z_eNB_cells = self.extract_coord_from_xyz(enb_cells)
 
-            if (HOSP_SCENARIO == False):
+            if (conf.HOSP_SCENARIO == False):
                 users_x, users_y, users_z = self.extract_coord_from_xyz(users)
                 users_x_for_2Dplot, users_y_for_2Dplot = [float(x) - 0.5 for x in users_x], [float(y) - 0.5 for y in
                                                                                              users_y]
                 users_x_for_3Dplot, users_y_for_3Dplot, users_z_for_3Dplot = users_x, users_y, users_z
-                users_x_for_2DplotCells, users_y_for_2DplotCells = [float(x) / CELL_RESOLUTION_PER_ROW - 0.5 for x in
-                                                                    users_x], [float(y) / CELL_RESOLUTION_PER_COL - 0.5
-                                                                               for y in users_y]
+                users_x_for_2DplotCells, users_y_for_2DplotCells = [float(x) / conf.CELL_RESOLUTION_PER_ROW - 0.5 for x
+                                                                    in
+                                                                    users_x], [
+                                                                       float(y) / conf.CELL_RESOLUTION_PER_COL - 0.5
+                                                                       for y in users_y]
                 users_x_for_3DplotCells, users_y_for_3DplotCells, users_z_for_3DplotCells = [float(
-                    x) / CELL_RESOLUTION_PER_ROW for x in users_x], [float(y) / CELL_RESOLUTION_PER_COL for y in
-                                                                     users_y], users_z
+                    x) / conf.CELL_RESOLUTION_PER_ROW for x in users_x], [float(y) / conf.CELL_RESOLUTION_PER_COL for y
+                                                                          in
+                                                                          users_y], users_z
 
             # Redefine cells in such a way to have the right plot visualization:
-            x_obs_cells_for_2Dplot = [elem * CELL_RESOLUTION_PER_COL for elem in x_obs_cells]
-            y_obs_cells_for_2Dplot = [elem * CELL_RESOLUTION_PER_ROW for elem in y_obs_cells]
-            x_cs_cells_for_2Dplot = [elem * CELL_RESOLUTION_PER_COL for elem in x_cs_cells]
-            y_cs_cells_for_2Dplot = [elem * CELL_RESOLUTION_PER_ROW for elem in y_cs_cells]
-            if (HOSP_SCENARIO == True):
-                x_hosp_cells_for_2Dplot = [elem * CELL_RESOLUTION_PER_COL for elem in x_hosp_cells]
-                y_hosp_cells_for_2Dplot = [elem * CELL_RESOLUTION_PER_ROW for elem in y_hosp_cells]
-            if (CREATE_ENODEB == True):
-                x_eNB_cells_for_2Dplot = [elem * CELL_RESOLUTION_PER_COL for elem in x_eNB_cells]
-                y_eNB_cells_for_2Dplot = [elem * CELL_RESOLUTION_PER_ROW for elem in y_eNB_cells]
+            x_obs_cells_for_2Dplot = [elem * conf.CELL_RESOLUTION_PER_COL for elem in x_obs_cells]
+            y_obs_cells_for_2Dplot = [elem * conf.CELL_RESOLUTION_PER_ROW for elem in y_obs_cells]
+            x_cs_cells_for_2Dplot = [elem * conf.CELL_RESOLUTION_PER_COL for elem in x_cs_cells]
+            y_cs_cells_for_2Dplot = [elem * conf.CELL_RESOLUTION_PER_ROW for elem in y_cs_cells]
+            if (conf.HOSP_SCENARIO == True):
+                x_hosp_cells_for_2Dplot = [elem * conf.CELL_RESOLUTION_PER_COL for elem in x_hosp_cells]
+                y_hosp_cells_for_2Dplot = [elem * conf.CELL_RESOLUTION_PER_ROW for elem in y_hosp_cells]
+            if (conf.CREATE_ENODEB == True):
+                x_eNB_cells_for_2Dplot = [elem * conf.CELL_RESOLUTION_PER_COL for elem in x_eNB_cells]
+                y_eNB_cells_for_2Dplot = [elem * conf.CELL_RESOLUTION_PER_ROW for elem in y_eNB_cells]
 
             # FIGURE 1 (Points 'point of view'):
             fig1 = plt.figure('Points')
 
-            if (DIMENSION_2D == False):
+            if (conf.DIMENSION_2D == False):
                 ax1 = fig1.add_subplot(121)
                 ax2 = fig1.add_subplot(122, projection='3d')
-                if (UNLIMITED_BATTERY == True):
+                if (conf.UNLIMITED_BATTERY == True):
                     points_status_matrix_un_bat = [
-                        [FREE if points_status_matrix[r][c] == CS_IN else points_status_matrix[r][c] for c in
+                        [conf.FREE if points_status_matrix[r][c] == conf.CS_IN else points_status_matrix[r][c] for c in
                          range(area_width)] for r in range(area_height)]
                     cells_status_matrix_un_bat = [
-                        [FREE if cells_status_matrix[r][c] == CS_IN else cells_status_matrix[r][c] for c in
+                        [conf.FREE if cells_status_matrix[r][c] == conf.CS_IN else cells_status_matrix[r][c] for c in
                          range(N_cells_col)] for r in range(N_cells_row)]
                     perceived_status_matrix_un_bat = [
-                        [FREE if perceived_status_matrix[r][c] == CS_IN else perceived_status_matrix[r][c] for c in
+                        [conf.FREE if perceived_status_matrix[r][c] == conf.CS_IN else perceived_status_matrix[r][c] for
+                         c in
                          range(area_width)] for r in range(area_height)]
                     points_status_matrix = points_status_matrix_un_bat
                     cells_status_matrix = cells_status_matrix_un_bat
                     perceived_status_matrix = perceived_status_matrix_un_bat
             else:
                 ax1 = fig1.add_subplot(111)
-                if (UNLIMITED_BATTERY == True):
-                    points_status_matrix_un_bat = [[FREE if points_status_matrix[r][c] == OBS_IN or
-                                                            points_status_matrix[r][c] == CS_IN else
+                if (conf.UNLIMITED_BATTERY == True):
+                    points_status_matrix_un_bat = [[conf.FREE if points_status_matrix[r][c] == conf.OBS_IN or
+                                                                 points_status_matrix[r][c] == conf.CS_IN else
                                                     points_status_matrix[r][c] for c in range(area_width)] for r in
                                                    range(area_height)]
-                    cells_status_matrix_un_bat = [[FREE if cells_status_matrix[r][c] == OBS_IN or
-                                                           cells_status_matrix[r][c] == CS_IN else
+                    cells_status_matrix_un_bat = [[conf.FREE if cells_status_matrix[r][c] == conf.OBS_IN or
+                                                                cells_status_matrix[r][c] == conf.CS_IN else
                                                    cells_status_matrix[r][c] for c in range(N_cells_col)] for r in
                                                   range(N_cells_row)]
-                    perceived_status_matrix_un_bat = [[FREE if perceived_status_matrix[r][c] == OBS_IN or
-                                                               perceived_status_matrix[r][c] == CS_IN else
+                    perceived_status_matrix_un_bat = [[conf.FREE if perceived_status_matrix[r][c] == conf.OBS_IN or
+                                                                    perceived_status_matrix[r][c] == conf.CS_IN else
                                                        perceived_status_matrix[r][c] for c in range(area_width)] for r
                                                       in range(area_height)]
                     points_status_matrix = points_status_matrix_un_bat
@@ -575,32 +583,33 @@ class Plot:
                     perceived_status_matrix = perceived_status_matrix_un_bat
                 else:
                     points_status_matrix_2D = [
-                        [FREE if points_status_matrix[r][c] == OBS_IN else points_status_matrix[r][c] for c in
+                        [conf.FREE if points_status_matrix[r][c] == conf.OBS_IN else points_status_matrix[r][c] for c in
                          range(area_width)] for r in range(area_height)]
                     cells_status_matrix_2D = [
-                        [FREE if cells_status_matrix[r][c] == OBS_IN else cells_status_matrix[r][c] for c in
+                        [conf.FREE if cells_status_matrix[r][c] == conf.OBS_IN else cells_status_matrix[r][c] for c in
                          range(N_cells_col)] for r in range(N_cells_row)]
                     perceived_status_matrix_2D = [
-                        [FREE if perceived_status_matrix[r][c] == OBS_IN else perceived_status_matrix[r][c] for c in
+                        [conf.FREE if perceived_status_matrix[r][c] == conf.OBS_IN else perceived_status_matrix[r][c]
+                         for c in
                          range(area_width)] for r in range(area_height)]
                     points_status_matrix = points_status_matrix_2D
                     cells_status_matrix = cells_status_matrix_2D
                     perceived_status_matrix = perceived_status_matrix_2D
 
-            if (CREATE_ENODEB == True):
+            if (conf.CREATE_ENODEB == True):
                 colors1 = [WHITE, DARK_BLUE, DARK_GREEN, DARK_RED]
             else:
-                if (DIMENSION_2D == False):
-                    if (UNLIMITED_BATTERY == True):
-                        colors1 = [WHITE, DARK_BLUE] if HOSP_SCENARIO == False else [WHITE, DARK_RED]
+                if (conf.DIMENSION_2D == False):
+                    if (conf.UNLIMITED_BATTERY == True):
+                        colors1 = [WHITE, DARK_BLUE] if conf.HOSP_SCENARIO == False else [WHITE, DARK_RED]
                     else:
-                        colors1 = [WHITE, DARK_BLUE, DARK_GREEN] if HOSP_SCENARIO == False else [WHITE, DARK_GREEN,
-                                                                                                 DARK_RED]
+                        colors1 = [WHITE, DARK_BLUE, DARK_GREEN] if conf.HOSP_SCENARIO == False else [WHITE, DARK_GREEN,
+                                                                                                      DARK_RED]
                 else:
-                    if (UNLIMITED_BATTERY == True):
-                        colors1 = [WHITE] if HOSP_SCENARIO == False else [WHITE, DARK_RED]
+                    if (conf.UNLIMITED_BATTERY == True):
+                        colors1 = [WHITE] if conf.HOSP_SCENARIO == False else [WHITE, DARK_RED]
                     else:
-                        colors1 = [WHITE, DARK_GREEN] if HOSP_SCENARIO == False else [WHITE, DARK_GREEN, DARK_RED]
+                        colors1 = [WHITE, DARK_GREEN] if conf.HOSP_SCENARIO == False else [WHITE, DARK_GREEN, DARK_RED]
             cmap1 = ListedColormap(colors1)
 
             ax1.imshow(points_status_matrix,
@@ -610,10 +619,10 @@ class Plot:
             ax1.set_xticklabels(np.arange(0, area_width + 1, 1))
             ax1.set_yticklabels(np.arange(0, area_height + 1, 1))
             ax1.grid(which='both')
-            if (HOSP_SCENARIO == False):
+            if (conf.HOSP_SCENARIO == False):
                 ax1.scatter(users_x_for_2Dplot, users_y_for_2Dplot, s=10, c=GOLD)
 
-            if (HOSP_SCENARIO == False):
+            if (conf.HOSP_SCENARIO == False):
                 for cluster_idx in self.num_color_range:
                     [ax1.add_artist(plt.Circle([centroids[cluster_idx][0], centroids[cluster_idx][1]],
                                                float(clusters_radiuses[cluster_idx]),
@@ -622,11 +631,11 @@ class Plot:
             else:
                 for hosp_p in hosp_points:
                     ax1.add_artist(plt.Circle((hosp_p._y_coord, hosp_p._x_coord, hosp_p._z_coord), 0.35,
-                                              color=hosp_p._priority)) #senza get_color_name
+                                              color=hosp_p._priority))  # senza get_color_name
             ax1.set_title('2D Points-Map')
 
-            if (DIMENSION_2D == False):
-                if (HOSP_SCENARIO == False):
+            if (conf.DIMENSION_2D == False):
+                if (conf.HOSP_SCENARIO == False):
                     ax2.scatter(users_y_for_3Dplot, users_x_for_3Dplot, users_z_for_3Dplot, s=10, c=GOLD)
 
                     for cluster_idx in self.num_color_range:
@@ -639,41 +648,42 @@ class Plot:
 
                 ax2.bar3d(y_obs_points, x_obs_points, bottom, width, depth, z_obs_points, shade=True, color=(0, 0, 0.6),
                           edgecolor="none")
-                if HOSP_SCENARIO == True:
+                if conf.HOSP_SCENARIO == True:
                     ax2.bar3d(y_hosp_points, x_hosp_points, bottom, width, depth, z_hosp_points, shade=True,
                               color=(0.7, 0, 0), edgecolor="none")
 
-                if (UNLIMITED_BATTERY == False):
-                    cs_colors = [(0, 0.4, 0) for cs in range(N_CS)]
+                if (conf.UNLIMITED_BATTERY == False):
+                    cs_colors = [(0, 0.4, 0) for cs in range(conf.N_CS)]
                     ax2.bar3d(y_cs_points, x_cs_points, bottom, width, depth, z_cs_points, shade=True, color=cs_colors,
                               edgecolor="none")
-                if (CREATE_ENODEB == True):
+                if (conf.CREATE_ENODEB == True):
                     ax2.bar3d(y_enb_point, x_enb_point, bottom, width, depth, z_enb_point, shade=True,
                               color=(0.5, 0, 0), edgecolor="none")
 
-                ax2.set_xlim(xmin=0, xmax=CELLS_COLS)
-                ax2.set_ylim(ymin=0, ymax=CELLS_ROWS)
+                ax2.set_xlim(xmin=0, xmax=conf.CELLS_COLS)
+                ax2.set_ylim(ymin=0, ymax=conf.CELLS_ROWS)
                 ax2.set_zlim(zmin=0)
                 ax2.set_title('3D Points-Map')
 
-            if (CREATE_ENODEB == True):
+            if (conf.CREATE_ENODEB == True):
                 fig1.legend(handles=[DARK_BLUE_square, DARK_GREEN_square, DARK_RED_square, GOLD_circle])
             else:
-                if (DIMENSION_2D == False):
-                    if (UNLIMITED_BATTERY == True):
-                        fig1.legend(handles=[DARK_BLUE_square, GOLD_circle]) if HOSP_SCENARIO == False else fig1.legend(
+                if (conf.DIMENSION_2D == False):
+                    if (conf.UNLIMITED_BATTERY == True):
+                        fig1.legend(
+                            handles=[DARK_BLUE_square, GOLD_circle]) if conf.HOSP_SCENARIO == False else fig1.legend(
                             handles=[DARK_BLUE_square, DARK_RED_square] + HOSP_CIRCLES)
                     else:
                         fig1.legend(handles=[DARK_BLUE_square, DARK_GREEN_square,
-                                             GOLD_circle]) if HOSP_SCENARIO == False else fig1.legend(
+                                             GOLD_circle]) if conf.HOSP_SCENARIO == False else fig1.legend(
                             handles=[DARK_BLUE_square, DARK_GREEN_square, DARK_RED_square] + HOSP_CIRCLES)
                 else:
-                    if (UNLIMITED_BATTERY == True):
-                        fig1.legend(handles=[GOLD_circle]) if (HOSP_SCENARIO == False) else fig1.legend(
+                    if (conf.UNLIMITED_BATTERY == True):
+                        fig1.legend(handles=[GOLD_circle]) if (conf.HOSP_SCENARIO == False) else fig1.legend(
                             handles=[DARK_RED_square] + HOSP_CIRCLES)
                     else:
                         fig1.legend(
-                            handles=[DARK_GREEN_square, GOLD_circle]) if HOSP_SCENARIO == False else fig1.legend(
+                            handles=[DARK_GREEN_square, GOLD_circle]) if conf.HOSP_SCENARIO == False else fig1.legend(
                             handles=[DARK_GREEN_square, DARK_RED_square] + HOSP_CIRCLES)
 
             plt.savefig(join(env_directory, "Minimum_Resolution.png"))
@@ -681,27 +691,29 @@ class Plot:
             # FIGURE 2 (Cells 'point of view'):
             fig2 = plt.figure('Cells')
 
-            if (DIMENSION_2D == False):
+            if (conf.DIMENSION_2D == False):
                 ax3 = fig2.add_subplot(121)
                 ax4 = fig2.add_subplot(122, projection='3d')
             else:
                 ax3 = fig2.add_subplot(111)
 
-            if (CREATE_ENODEB == True):
+            if (conf.CREATE_ENODEB == True):
                 colors2 = [WHITE, LIGHT_BLUE, LIGHT_GREEN, LIGHT_RED]
             else:
-                if (DIMENSION_2D == False):
-                    if (UNLIMITED_BATTERY == True):
-                        colors2 = [WHITE, LIGHT_BLUE] if HOSP_SCENARIO == False else [WHITE, LIGHT_RED]
+                if (conf.DIMENSION_2D == False):
+                    if (conf.UNLIMITED_BATTERY == True):
+                        colors2 = [WHITE, LIGHT_BLUE] if conf.HOSP_SCENARIO == False else [WHITE, LIGHT_RED]
                     else:
-                        colors2 = [WHITE, LIGHT_BLUE, LIGHT_GREEN] if HOSP_SCENARIO == False else [WHITE, LIGHT_GREEN,
-                                                                                                   LIGHT_RED]
+                        colors2 = [WHITE, LIGHT_BLUE, LIGHT_GREEN] if conf.HOSP_SCENARIO == False else [WHITE,
+                                                                                                        LIGHT_GREEN,
+                                                                                                        LIGHT_RED]
                 else:
-                    if (UNLIMITED_BATTERY == True):
-                        colors2 = [WHITE, LIGHT_BLUE] if HOSP_SCENARIO == False else [WHITE, LIGHT_RED]
+                    if (conf.UNLIMITED_BATTERY == True):
+                        colors2 = [WHITE, LIGHT_BLUE] if conf.HOSP_SCENARIO == False else [WHITE, LIGHT_RED]
                     else:
-                        colors2 = [WHITE, LIGHT_BLUE, LIGHT_GREEN] if HOSP_SCENARIO == False else [WHITE, LIGHT_GREEN,
-                                                                                                   LIGHT_RED]
+                        colors2 = [WHITE, LIGHT_BLUE, LIGHT_GREEN] if conf.HOSP_SCENARIO == False else [WHITE,
+                                                                                                        LIGHT_GREEN,
+                                                                                                        LIGHT_RED]
             cmap2 = ListedColormap(colors2)
 
             ax3.imshow(cells_status_matrix, cmap=cmap2)
@@ -710,35 +722,35 @@ class Plot:
             ax3.set_xticklabels(np.arange(0, area_width + 1, 1))
             ax3.set_yticklabels(np.arange(0, area_height + 1, 1))
             ax3.grid(which='major')
-            if (HOSP_SCENARIO == False):
+            if (conf.HOSP_SCENARIO == False):
                 ax3.scatter(users_x_for_2DplotCells, users_y_for_2DplotCells, s=10, c=GOLD)
             else:
                 for hosp_c in hosp_cells:
                     # print("OCCHIOOOOOOOOOOOOOOOOOOOOO: ", hosp_c._priority)
                     ax3.add_artist(plt.Circle((hosp_c._y_coord, hosp_c._x_coord, hosp_c._z_coord), 0.35,
-                                              color=hosp_c._priority)) #senza get_color_name
+                                              color=hosp_c._priority))  # senza get_color_name
 
             # A Graphical approximation is needed in order to get a cluster in 'cells view' which is as closest as possible to the one in 'points view' (The approximation is only graphical):
-            if (HOSP_SCENARIO == False):
+            if (conf.HOSP_SCENARIO == False):
                 for cluster_idx in self.num_color_range:
-                    [ax3.add_artist(plt.Circle([centroids[cluster_idx][0] / CELL_RESOLUTION_PER_ROW - 0.25,
-                                                centroids[cluster_idx][1] / CELL_RESOLUTION_PER_COL - 0.25,
+                    [ax3.add_artist(plt.Circle([centroids[cluster_idx][0] / conf.CELL_RESOLUTION_PER_ROW - 0.25,
+                                                centroids[cluster_idx][1] / conf.CELL_RESOLUTION_PER_COL - 0.25,
                                                 centroids[cluster_idx][2]], (float(
-                        clusters_radiuses[cluster_idx] / (CELL_RESOLUTION_PER_ROW)) + float(
-                        clusters_radiuses[cluster_idx] / (CELL_RESOLUTION_PER_COL))) / 2,
+                        clusters_radiuses[cluster_idx] / (conf.CELL_RESOLUTION_PER_ROW)) + float(
+                        clusters_radiuses[cluster_idx] / (conf.CELL_RESOLUTION_PER_COL))) / 2,
                                                color=self.clusters_colors[cluster_idx], fill=False)) for cluster_idx in
                      self.num_color_range]
             ax3.set_title('2D Cells-Map')
 
-            if (DIMENSION_2D == False):
-                if (HOSP_SCENARIO == False):
+            if (conf.DIMENSION_2D == False):
+                if (conf.HOSP_SCENARIO == False):
                     ax4.scatter(users_y_for_3DplotCells, users_x_for_3DplotCells, users_z_for_3DplotCells, s=10, c=GOLD)
                     for cluster_idx in self.num_color_range:
-                        patch = plt.Circle([centroids[cluster_idx][1] / CELL_RESOLUTION_PER_COL + 0.25,
-                                            centroids[cluster_idx][0] / CELL_RESOLUTION_PER_ROW + 0.25,
+                        patch = plt.Circle([centroids[cluster_idx][1] / conf.CELL_RESOLUTION_PER_COL + 0.25,
+                                            centroids[cluster_idx][0] / conf.CELL_RESOLUTION_PER_ROW + 0.25,
                                             centroids[cluster_idx][2]], (float(
-                            clusters_radiuses[cluster_idx] / (CELL_RESOLUTION_PER_ROW)) + float(
-                            clusters_radiuses[cluster_idx] / (CELL_RESOLUTION_PER_COL))) / 2,
+                            clusters_radiuses[cluster_idx] / (conf.CELL_RESOLUTION_PER_ROW)) + float(
+                            clusters_radiuses[cluster_idx] / (conf.CELL_RESOLUTION_PER_COL))) / 2,
                                            color=self.clusters_colors[cluster_idx], fill=False)
                         ax4.add_patch(patch)
                         art3d.pathpatch_2d_to_3d(patch)
@@ -746,42 +758,42 @@ class Plot:
 
                 ax4.bar3d(y_obs_cells, x_obs_cells, bottom, width, depth, z_obs_cells, shade=True, color=(0.4, 1, 1),
                           edgecolor="none")
-                if HOSP_SCENARIO == True:
+                if conf.HOSP_SCENARIO == True:
                     ax4.bar3d(y_hosp_cells, x_hosp_cells, bottom, width, depth, z_hosp_cells, shade=True,
                               color=(1, 0, 0), edgecolor="none")
 
-                if (UNLIMITED_BATTERY == False):
-                    cs_cells_colors = [(0.4, 1, 0.59) for cs in range(N_CS)]
+                if (conf.UNLIMITED_BATTERY == False):
+                    cs_cells_colors = [(0.4, 1, 0.59) for cs in range(conf.N_CS)]
                     ax4.bar3d(y_cs_cells, x_cs_cells, bottom, width, depth, z_cs_cells, shade=True,
                               color=cs_cells_colors, edgecolor="none")
-                if (CREATE_ENODEB == True):
+                if (conf.CREATE_ENODEB == True):
                     ax4.bar3d(y_eNB_cells, x_eNB_cells, bottom, width, depth, z_eNB_cells, shade=True,
                               color=(0.5, 0, 0), edgecolor="none")
 
-                ax4.set_xlim(xmin=0, xmax=CELLS_COLS)
-                ax4.set_ylim(ymin=0, ymax=CELLS_ROWS)
+                ax4.set_xlim(xmin=0, xmax=conf.CELLS_COLS)
+                ax4.set_ylim(ymin=0, ymax=conf.CELLS_ROWS)
                 ax4.set_zlim(zmin=0)
                 ax4.set_title('3D Cells-Map')
 
-            if (CREATE_ENODEB == True):
+            if (conf.CREATE_ENODEB == True):
                 fig2.legend(handles=[LIGHT_BLUE_square, LIGHT_GREEN_square, LIGHT_RED_square, GOLD_circle])
             else:
-                if (DIMENSION_2D == False):
-                    if (UNLIMITED_BATTERY == True):
+                if (conf.DIMENSION_2D == False):
+                    if (conf.UNLIMITED_BATTERY == True):
                         fig2.legend(
-                            handles=[LIGHT_BLUE_square, GOLD_circle]) if HOSP_SCENARIO == False else fig2.legend(
+                            handles=[LIGHT_BLUE_square, GOLD_circle]) if conf.HOSP_SCENARIO == False else fig2.legend(
                             handles=[LIGHT_BLUE_square, LIGHT_RED_square] + HOSP_CIRCLES)
                     else:
                         fig2.legend(handles=[LIGHT_BLUE_square, LIGHT_GREEN_square,
-                                             GOLD_circle]) if HOSP_SCENARIO == False else fig2.legend(
+                                             GOLD_circle]) if conf.HOSP_SCENARIO == False else fig2.legend(
                             handles=[LIGHT_BLUE_square, LIGHT_GREEN_square, LIGHT_RED_square] + HOSP_CIRCLES)
                 else:
-                    if (UNLIMITED_BATTERY == True):
-                        fig2.legend(handles=[GOLD_circle]) if (HOSP_SCENARIO == False) else fig2.legend(
+                    if (conf.UNLIMITED_BATTERY == True):
+                        fig2.legend(handles=[GOLD_circle]) if (conf.HOSP_SCENARIO == False) else fig2.legend(
                             handles=[LIGHT_RED_square] + HOSP_CIRCLES)
                     else:
                         fig2.legend(
-                            handles=[LIGHT_GREEN_square, GOLD_circle]) if HOSP_SCENARIO == False else fig2.legend(
+                            handles=[LIGHT_GREEN_square, GOLD_circle]) if conf.HOSP_SCENARIO == False else fig2.legend(
                             handles=[LIGHT_GREEN_square, LIGHT_RED_square] + HOSP_CIRCLES)
 
             plt.savefig(join(env_directory, "Desired_Resolution.png"))
@@ -791,7 +803,7 @@ class Plot:
 
                 fig3 = plt.figure('Points and Cells')
 
-                if (DIMENSION_2D == False):
+                if (conf.DIMENSION_2D == False):
                     ax5 = fig3.add_subplot(121)
                     ax6 = fig3.add_subplot(122, projection='3d')
                 else:
@@ -799,18 +811,18 @@ class Plot:
 
                 ax5.imshow(points_status_matrix, cmap=cmap1)
                 ax5.imshow(perceived_status_matrix, cmap=cmap2, alpha=0.5)
-                ax5.set_xticks(np.arange(0, area_width + 1, CELL_RESOLUTION_PER_COL) - 0.5)
+                ax5.set_xticks(np.arange(0, area_width + 1, conf.CELL_RESOLUTION_PER_COL) - 0.5)
                 ax5.set_xticks(np.arange(0, area_width + 1, 1) - 0.5, minor=True)
-                ax5.set_yticks(np.arange(0, area_height + 1, CELL_RESOLUTION_PER_ROW) - 0.5)
+                ax5.set_yticks(np.arange(0, area_height + 1, conf.CELL_RESOLUTION_PER_ROW) - 0.5)
                 ax5.set_yticks(np.arange(0, area_height + 1, 1) - 0.5, minor=True)
-                ax5.set_xticklabels(np.arange(0, area_width + 1, CELL_RESOLUTION_PER_COL))
-                ax5.set_yticklabels(np.arange(0, area_width + 1, CELL_RESOLUTION_PER_ROW))
+                ax5.set_xticklabels(np.arange(0, area_width + 1, conf.CELL_RESOLUTION_PER_COL))
+                ax5.set_yticklabels(np.arange(0, area_width + 1, conf.CELL_RESOLUTION_PER_ROW))
                 ax5.grid(which='minor', alpha=0.2)
                 ax5.grid(which='major', alpha=0.5)
-                if (HOSP_SCENARIO == False):
+                if (conf.HOSP_SCENARIO == False):
                     ax5.scatter(users_x_for_2Dplot, users_y_for_2Dplot, s=10, c=GOLD)
 
-                if (HOSP_SCENARIO == False):
+                if (conf.HOSP_SCENARIO == False):
                     for cluster_idx in self.num_color_range:
                         [ax5.add_artist(plt.Circle([centroids[cluster_idx][0], centroids[cluster_idx][1]],
                                                    float(clusters_radiuses[cluster_idx]),
@@ -818,8 +830,8 @@ class Plot:
                          in self.num_color_range]
                 ax5.set_title('2D Points/Cells-Map')
 
-                if (DIMENSION_2D == False):
-                    if (HOSP_SCENARIO == False):
+                if (conf.DIMENSION_2D == False):
+                    if (conf.HOSP_SCENARIO == False):
                         ax6.scatter(users_y_for_3Dplot, users_x_for_3Dplot, users_z_for_3Dplot, s=10, c=GOLD)
                         for cluster_idx in self.num_color_range:
                             patch = plt.Circle([centroids[cluster_idx][1] + incr_assumed_coord,
@@ -830,68 +842,74 @@ class Plot:
                             art3d.pathpatch_2d_to_3d(patch)
                     ax6.bar3d(y_obs_points, x_obs_points, bottom, width, depth, z_obs_points, shade=True,
                               color=(0, 0, 0.6), edgecolor="none")
-                    if HOSP_SCENARIO == True:
+                    if conf.HOSP_SCENARIO == True:
                         ax6.bar3d(y_hosp_points, x_hosp_points, bottom, width, depth, z_hosp_points, shade=True,
                                   color=(0.7, 0, 0), edgecolor="none")
 
-                    if (UNLIMITED_BATTERY == False):
+                    if (conf.UNLIMITED_BATTERY == False):
                         ax6.bar3d(y_cs_points, x_cs_points, bottom, width, depth, z_cs_points, shade=True,
                                   color=(0, 0.4, 0), edgecolor="none")
-                    if (CREATE_ENODEB == True):
+                    if (conf.CREATE_ENODEB == True):
                         ax6.bar3d(y_enb_point, x_enb_point, bottom, width, depth, z_enb_point, shade=True,
                                   color=(1, 0, 0), edgecolor="none")
-                    ax6.bar3d(y_obs_cells_for_2Dplot, x_obs_cells_for_2Dplot, bottom, CELL_RESOLUTION_PER_COL,
-                              CELL_RESOLUTION_PER_ROW, z_obs_cells, shade=True, color=obs_cells_colors,
+                    ax6.bar3d(y_obs_cells_for_2Dplot, x_obs_cells_for_2Dplot, bottom, conf.CELL_RESOLUTION_PER_COL,
+                              conf.CELL_RESOLUTION_PER_ROW, z_obs_cells, shade=True, color=obs_cells_colors,
                               edgecolor="none")
-                    if HOSP_SCENARIO == True:
-                        ax6.bar3d(y_hosp_cells_for_2Dplot, x_hosp_cells_for_2Dplot, bottom, CELL_RESOLUTION_PER_COL,
-                                  CELL_RESOLUTION_PER_ROW, z_hosp_cells, shade=True, color=hosp_cells_colors,
+                    if conf.HOSP_SCENARIO == True:
+                        ax6.bar3d(y_hosp_cells_for_2Dplot, x_hosp_cells_for_2Dplot, bottom,
+                                  conf.CELL_RESOLUTION_PER_COL,
+                                  conf.CELL_RESOLUTION_PER_ROW, z_hosp_cells, shade=True, color=hosp_cells_colors,
                                   edgecolor="none")
-                    if (UNLIMITED_BATTERY == False):
-                        ax6.bar3d(y_cs_cells_for_2Dplot, x_cs_cells_for_2Dplot, bottom, CELL_RESOLUTION_PER_COL,
-                                  CELL_RESOLUTION_PER_ROW, z_cs_cells, shade=True, color=cs_cells_colors,
+                    if (conf.UNLIMITED_BATTERY == False):
+                        ax6.bar3d(y_cs_cells_for_2Dplot, x_cs_cells_for_2Dplot, bottom, conf.CELL_RESOLUTION_PER_COL,
+                                  conf.CELL_RESOLUTION_PER_ROW, z_cs_cells, shade=True, color=cs_cells_colors,
                                   edgecolor="none")
-                    if (CREATE_ENODEB == True):
-                        ax6.bar3d(y_eNB_cells_for_2Dplot, x_eNB_cells_for_2Dplot, bottom, CELL_RESOLUTION_PER_COL,
-                                  CELL_RESOLUTION_PER_ROW, z_eNB_cells, shade=True, color=(1, 0, 0, 0.3),
+                    if (conf.CREATE_ENODEB == True):
+                        ax6.bar3d(y_eNB_cells_for_2Dplot, x_eNB_cells_for_2Dplot, bottom, conf.CELL_RESOLUTION_PER_COL,
+                                  conf.CELL_RESOLUTION_PER_ROW, z_eNB_cells, shade=True, color=(1, 0, 0, 0.3),
                                   edgecolor="none")
-                    ax6.set_xlim(xmin=0, xmax=CELLS_COLS)
-                    ax6.set_ylim(ymin=0, ymax=CELLS_ROWS)
+                    ax6.set_xlim(xmin=0, xmax=conf.CELLS_COLS)
+                    ax6.set_ylim(ymin=0, ymax=conf.CELLS_ROWS)
                     ax6.set_zlim(zmin=0)
                     ax6.set_title('3D Points/Cells-Map')
 
-                if (CREATE_ENODEB == True):
+                if (conf.CREATE_ENODEB == True):
                     fig3.legend(handles=[DARK_BLUE_square, LIGHT_BLUE_square, DARK_GREEN_square, LIGHT_GREEN_square,
                                          DARK_RED_square, LIGHT_RED_square, GOLD_circle])
                 else:
-                    if (DIMENSION_2D == False):
-                        if (UNLIMITED_BATTERY == True):
+                    if (conf.DIMENSION_2D == False):
+                        if (conf.UNLIMITED_BATTERY == True):
                             fig3.legend(handles=[DARK_BLUE_square, LIGHT_BLUE_square,
-                                                 GOLD_circle]) if HOSP_SCENARIO == False else fig3.legend(
+                                                 GOLD_circle]) if conf.HOSP_SCENARIO == False else fig3.legend(
                                 handles=[DARK_BLUE_square, LIGHT_BLUE_square, DARK_RED_square,
                                          LIGHT_RED_square] + HOSP_CIRCLES)
                         else:
                             fig3.legend(
                                 handles=[DARK_BLUE_square, LIGHT_BLUE_square, DARK_GREEN_square, LIGHT_GREEN_square,
-                                         GOLD_circle]) if HOSP_SCENARIO == False else fig3.legend(
+                                         GOLD_circle]) if conf.HOSP_SCENARIO == False else fig3.legend(
                                 handles=[DARK_BLUE_square, LIGHT_BLUE_square, DARK_GREEN_square, LIGHT_GREEN_square,
                                          DARK_RED_square, LIGHT_RED_square] + HOSP_CIRCLES)
                     else:
-                        if (UNLIMITED_BATTERY == True):
-                            fig3.legend(handles=[GOLD_circle]) if (HOSP_SCENARIO == False) else fig3.legend(
+                        if (conf.UNLIMITED_BATTERY == True):
+                            fig3.legend(handles=[GOLD_circle]) if (conf.HOSP_SCENARIO == False) else fig3.legend(
                                 handles=[DARK_RED_square, LIGHT_RED_square] + HOSP_CIRCLES)
                         else:
                             fig3.legend(handles=[DARK_GREEN_square, LIGHT_GREEN_square,
-                                                 GOLD_circle]) if HOSP_SCENARIO == False else fig3.legend(
+                                                 GOLD_circle]) if conf.HOSP_SCENARIO == False else fig3.legend(
                                 handles=[DARK_GREEN_square, LIGHT_GREEN_square, DARK_RED_square,
                                          LIGHT_RED_square] + HOSP_CIRCLES)
 
             if ((area_height != N_cells_row) and (area_width != N_cells_col)):
                 plt.savefig(join(env_directory, "Mixed_Resolution.png"))
+
+            #plt.show()
+            SHOW_PLOT = False
+
             if SHOW_PLOT == True:
                 plt.show()
             else:
                 pass
+
 
     def QoE_plot(self, parameter_values, epochs, where_to_save, param_name):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -907,7 +925,7 @@ class Plot:
 
         parameter_samples = []
         end = PLOT_EACH_N_EPOCH
-        for start in range(0, EPISODES, PLOT_EACH_N_EPOCH):
+        for start in range(0, conf.EPISODES, PLOT_EACH_N_EPOCH):
             current_sample = parameter_values[start:end]
             parameter_samples.append(current_sample)
             start = end
@@ -922,10 +940,10 @@ class Plot:
         parameter_values.append(last_value)
         plt.errorbar(RANGE_EPOCHS_TO_PLOT, parameter_values, yerr=stds)
 
-        if (STATIC_REQUEST == False):
+        if (conf.STATIC_REQUEST == False):
             legend_labels.append('Starting Epoch for Users moving')
-        for user_epoch_move in range(MOVE_USERS_EACH_N_EPOCHS, epochs + 1, MOVE_USERS_EACH_N_EPOCHS):
-            if (STATIC_REQUEST == False):
+        for user_epoch_move in range(conf.MOVE_USERS_EACH_N_EPOCHS, epochs + 1, conf.MOVE_USERS_EACH_N_EPOCHS):
+            if (conf.STATIC_REQUEST == False):
                 plt.axvline(x=user_epoch_move, color='green')  # , label='Starting Epoch for Users moving')
 
         legend_labels.append('QoE Parameter and related std')
@@ -948,7 +966,7 @@ class Plot:
         plt.title("Services Provision")
 
         legend_labels = []
-        for service_idx in range(N_SERVICES):
+        for service_idx in range(conf.N_SERVICES):
             if (service_idx == 0):
                 service_label = "Throughput Service"
             elif (service_idx == 1):
@@ -995,7 +1013,7 @@ class Plot:
             last_value = rewards[-1]
             rewards_to_plot = rewards[::PLOT_EACH_N_EPOCH]
             rewards_to_plot.append(last_value)
-            plt.plot(RANGE_EPOCHS_TO_PLOT, rewards_to_plot, color=UAVS_COLORS[UAV_ID])
+            plt.plot(RANGE_EPOCHS_TO_PLOT, rewards_to_plot, color=clrs.UAVS_COLORS[UAV_ID])
             UAV_ID += 1
             legend_labels.append('UAV' + str(UAV_ID))
 
@@ -1045,9 +1063,11 @@ class Plot:
             action_values = actual_q_table[state]
             max_action_value = max(action_values)
             min_action_value = min(action_values)
-            ax.scatter(state_count, DICT_ACTION_SPACE[action_values.index(max_action_value)], c="green", marker="o",
+            ax.scatter(state_count, conf.DICT_ACTION_SPACE[action_values.index(max_action_value)], c="green",
+                       marker="o",
                        alpha=0.4)
-            ax.scatter(state_count, DICT_ACTION_SPACE[action_values.index(min_action_value)], c="red", marker="o",
+            ax.scatter(state_count, conf.DICT_ACTION_SPACE[action_values.index(min_action_value)], c="red",
+                       marker="o",
                        alpha=0.4)
             state_count += 1
 
@@ -1086,7 +1106,7 @@ class Plot:
         ax.set_xlabel("Epochs")
         ax.set_ylabel("Bandwidth Usage")
 
-        range_n_uavs = range(N_UAVS)
+        range_n_uavs = range(conf.N_UAVS)
         legend_labels = []
         for uav_idx in range_n_uavs:
             bandwidths = UAVs_used_bandwidth[uav_idx][::PLOT_EACH_N_EPOCH]
@@ -1114,34 +1134,36 @@ class Plot:
         # Save the image representing the battery level of a UAV when it starts to recharge in 'directory_name'.  #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-        n_recharges_per_uav = [range(1, len(battery_history[uav]) + 1) for uav in range(N_UAVS)]
-        max_recharges_per_uav = max([len(battery_history[uav]) for uav in range(N_UAVS)])
+        n_recharges_per_uav = [range(1, len(battery_history[uav]) + 1) for uav in range(conf.N_UAVS)]
+        max_recharges_per_uav = max([len(battery_history[uav]) for uav in range(conf.N_UAVS)])
         UAV_ID = 0
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
 
-        ax.set_xlabel("N-th Start of Charging (every " + str(SHOW_BATTERY_LEVEL_FOR_CHARGING_INSTANT) + " charges)")
+        ax.set_xlabel(
+            "N-th Start of Charging (every " + str(conf.SHOW_BATTERY_LEVEL_FOR_CHARGING_INSTANT) + " charges)")
         ax.set_ylabel("Battery Level")
         plt.title('Battery level when start to charge')
 
         for UAV in n_recharges_per_uav:
             ax.bar(n_recharges_per_uav[UAV_ID],
                    [self.battery_percentage(battery_levels) for battery_levels in battery_history[UAV_ID]],
-                   color=UAVS_COLORS[UAV_ID], align='center')
+                   color=clrs.UAVS_COLORS[UAV_ID], align='center')
             UAV_ID += 1
 
             ax.set_xlim(xmin=0)
             ax.set_ylim(ymin=0)
             ax.set(xticks=range(0, max_recharges_per_uav + 1),
-                   xticklabels=range(0, max_recharges_per_uav * SHOW_BATTERY_LEVEL_FOR_CHARGING_INSTANT + 1,
-                                     SHOW_BATTERY_LEVEL_FOR_CHARGING_INSTANT))
+                   xticklabels=range(0, max_recharges_per_uav * conf.SHOW_BATTERY_LEVEL_FOR_CHARGING_INSTANT + 1,
+                                     conf.SHOW_BATTERY_LEVEL_FOR_CHARGING_INSTANT))
 
             plt.xticks(range(0, max_recharges_per_uav + 1))
             plt.tick_params(labelbottom=False)
-            plt.yticks(range(0, self.battery_percentage(CRITICAL_BATTERY_LEVEL), 5))
+            plt.yticks(range(0, self.battery_percentage(conf.CRITICAL_BATTERY_LEVEL), 5))
 
-            plt.savefig(join(directory_name[UAV_ID - 1], "Battery_level_when_start_charge_UAV" + str(UAV_ID)) + ".png")
+            plt.savefig(
+                join(directory_name[UAV_ID - 1], "Battery_level_when_start_charge_UAV" + str(UAV_ID)) + ".png")
 
     def UAVS_crashes(self, epochs, UAVs_crashes, directory_name):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -1164,16 +1186,16 @@ class Plot:
         # if (UAVs_crashes[episode-1]==0):
         # break
 
-        for uav_idx in range(N_UAVS):
+        for uav_idx in range(conf.N_UAVS):
             current_uav_crashes = [ep_idx for ep_idx in epochs_to_plot if UAVs_crashes[ep_idx - 1][uav_idx] == True]
             UAV_ID = uav_idx + 1
             ax.scatter(current_uav_crashes, [UAV_ID for elem in range(len(current_uav_crashes))],
-                       color=UAVS_COLORS[uav_idx], marker="x")
+                       color=clrs.UAVS_COLORS[uav_idx], marker="x")
             legend_labels.append('UAV' + str(UAV_ID))
 
         ax.set_xlim(xmin=1, xmax=epochs + 1)
-        ax.set_yticks(np.arange(1, N_UAVS + 1))
-        ax.set_yticklabels(np.arange(1, N_UAVS + 1))
+        ax.set_yticks(np.arange(1, conf.N_UAVS + 1))
+        ax.set_yticklabels(np.arange(1, conf.N_UAVS + 1))
 
         plt.legend(legend_labels)
         plt.savefig(join(directory_name, "UAVs_crashes.png"))
@@ -1183,10 +1205,9 @@ class Plot:
         # Return the battery level in percentage. #
         # # # # # # # # # # # # # # # # # # # # # #
 
-        percentage_battery_level = round((battery_level * 100) / FULL_BATTERY_LEVEL)
+        percentage_battery_level = round((battery_level * 100) / conf.FULL_BATTERY_LEVEL)
 
         return percentage_battery_level
-
 
 if __name__ == '__main__':
     plot = Plot()
@@ -1213,18 +1234,19 @@ if __name__ == '__main__':
     initial_centroids = load.initial_centroids
     initial_clusters_radiuses = load.initial_clusters_radiuses
 
-    # _________________________________________________________________________________________________
+# _________________________________________________________________________________________________
 
-    # ___________________________________________ Status Matrices Creation: ___________________________________________
+# ___________________________________________ Status Matrices Creation: ___________________________________________
 
-    points_status_matrix = plot.compute_status_matrix(points_matrix, AREA_HEIGHT, AREA_WIDTH)
-    cells_status_matrix = plot.compute_status_matrix(cells_matrix, CELLS_ROWS, CELLS_COLS)
-    perceived_status_matrix = plot.compute_perceived_status_matrix(cells_matrix, AREA_HEIGHT, AREA_WIDTH, CELLS_ROWS,
-                                                                   CELLS_COLS)
+    points_status_matrix = plot.compute_status_matrix(points_matrix, conf.AREA_HEIGHT, conf.AREA_WIDTH)
+    cells_status_matrix = plot.compute_status_matrix(cells_matrix, conf.CELLS_ROWS, conf.CELLS_COLS)
+    perceived_status_matrix = plot.compute_perceived_status_matrix(cells_matrix, conf.AREA_HEIGHT, conf.AREA_WIDTH, conf.CELLS_ROWS,
+                                                                   conf.CELLS_COLS)
 
-    # _________________________________________________________________________________________________________________
 
-    # ___________________________________________ Directory Creation and Saving: ___________________________________________
+# _________________________________________________________________________________________________________________
+
+# ___________________________________________ Directory Creation and Saving: ___________________________________________
 
     # Create directory 'MAP_STATUS_DIR' to save data:
     directory = Directories()
@@ -1234,16 +1256,15 @@ if __name__ == '__main__':
     save = Saver()
     save.maps_status(points_status_matrix, cells_status_matrix, perceived_status_matrix)
 
-    # _______________________________________________________________________________________________________________________
+# _______________________________________________________________________________________________________________________
 
-    # ___________________________________________ Plotting (with no animation): ___________________________________________
+# ___________________________________________ Plotting (with no animation): ___________________________________________
     max_paths = 0
 
 
-
-    if j == None and HOSP_SCENARIO == True:
+    if j == 1000 and conf.HOSP_SCENARIO == True:
         for i in range(len(agents_paths)):
-            print(i)
+            #print(i)
             if len(agents_paths[i]) > max_paths:
                 max_paths = len(agents_paths[i])
             else:
@@ -1259,23 +1280,23 @@ if __name__ == '__main__':
             else:
                 pass
 
-        for i in range(len(agents_paths)):
-            print(len(agents_paths[i]))
+        '''for i in range(len(agents_paths)):
+            print(len(agents_paths[i]))'''
 
         # agents_paths = [[(0, 0, 1), (1, 0, 1), (1, 1, 2), (1, 1, 3), (2, 1, 2)], [(0, 0, 1), (0, 1, 1), (1, 1, 0), (1, 1, 2), (1, 2, 3)]]
         print("PLOTTING_SCENARIO..")
         plot.plt_map_views(obs_points, cs_points, eNB_point, hosp_points,
                            obs_cells, cs_cells, eNB_cells, hosp_cells, points_status_matrix,
                            cells_status_matrix, perceived_status_matrix, initial_users, initial_centroids,
-                           initial_clusters_radiuses, AREA_HEIGHT, AREA_WIDTH, CELLS_ROWS, CELLS_COLS, agents_paths,
+                           initial_clusters_radiuses, conf.AREA_HEIGHT, conf.AREA_WIDTH, conf.CELLS_ROWS, conf.CELLS_COLS, agents_paths,
                            path_animation=True)
     else:
         print("PLOTTING_SCENARIO..")
         plot.plt_map_views(obs_points, cs_points, eNB_point, hosp_points,
                            obs_cells, cs_cells, eNB_cells, hosp_cells, points_status_matrix,
                            cells_status_matrix, perceived_status_matrix, initial_users, initial_centroids,
-                           initial_clusters_radiuses, AREA_HEIGHT, AREA_WIDTH, CELLS_ROWS, CELLS_COLS,
-                           agents_paths=None,
+                           initial_clusters_radiuses, conf.AREA_HEIGHT, conf.AREA_WIDTH, conf.CELLS_ROWS,
+                           conf.CELLS_COLS, agents_paths=None,
                            path_animation=False)
 
 
