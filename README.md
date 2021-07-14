@@ -17,7 +17,7 @@ In both scenarios the environment involves a volume (or area) of operations whic
 
 ### Service Scenario
 
-This scenario derived from the Master Thesis in Artificial Intelligence and Robotics at Sapienza University of Rome, supervised by Prof. Luca (https://github.com/DamianoBrunori/MultiUAV-OpenAIGym, D. Brunori, S. Colonnese; F. Cuomo, L. Iocchi “A Reinforcement Learning Environment for Multi-Service UAV-enabled Wireless Systems”, PerVehicle 2021 3rd International Workshop on Pervasive Computing for Vehicular Systems colocated with PERCOM 2021, March 2021)
+This scenario derives from the Master Thesis in Artificial Intelligence and Robotics at Sapienza University of Rome, supervised by Prof. Luca (https://github.com/DamianoBrunori/MultiUAV-OpenAIGym, D. Brunori, S. Colonnese; F. Cuomo, L. Iocchi “A Reinforcement Learning Environment for Multi-Service UAV-enabled Wireless Systems”, PerVehicle 2021 3rd International Workshop on Pervasive Computing for Vehicular Systems colocated with PERCOM 2021, March 2021)
 
 In this scenario N drones can be deployed and M Charging Stations (CS) are made available at locations placed in points which are equidistant from the middle of the operational volume (area). These charging stations are placed at equal distance one from another. Drones are supposed to serve users while flying (except for some particular cases such as while they are going to a CS) and their performance are evaluated according to some predefined metrics. Each user requests one out of N_serv services (as throughput request, edge-computing or data gathering), with some parameters stored as attributes of each user.
 
@@ -31,7 +31,7 @@ We can set the presence of C clusters of users, whose centroid locations are gen
 
 ### Hospitals Scenario
 
-This scenario derived from Master Thesis in Engineering in Computer Science at Sapienza University of Rome, supervised by Prof. Luca Iocchi (https://alee08.github.io/Multi-UAV_RL_RB).
+This scenario derives from Master Thesis in Engineering in Computer Science at Sapienza University of Rome, supervised by Prof. Luca Iocchi (https://alee08.github.io/Multi-UAV_RL_RB).
 
 The goal of MultiUAV-RL-RB is to find an optimal policy for each agent, reducing interference between agent policies. Agents must respect the mission priority associated with each goal and reach the goals in the correct order.
 
