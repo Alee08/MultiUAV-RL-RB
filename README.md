@@ -17,7 +17,7 @@ In both scenarios the environment involves a volume (or area) of operations whic
 
 ### Hospitals Scenario
 
-This scenario derives from Master Thesis in Engineering in Computer Science at Sapienza University of Rome, supervised by Prof. Luca Iocchi (https://alee08.github.io/Multi-UAV_RL_RB).
+This scenario derives from Master Thesis in Engineering in Computer Science at Sapienza University of Rome, supervised by Prof. Luca Iocchi (https://alee08.github.io/assets/Multi_UAV/scenario.png).
 
 The goal of MultiUAV-RL-RB is to find an optimal policy for each agent, reducing interference between agent policies. Agents must respect the mission priority associated with each goal and reach the goals in the correct order.
 
@@ -32,8 +32,8 @@ In our specific case, the fluents are the colours to be assigned to each hospita
 <table>
   <thead>
     <tr>
-      <th style="text-align: center"><img src="https://alee08.github.io/_pages/Multi_UAV/ex3.gif" alt="" /></th>
-      <th style="text-align: center"><img src="https://alee08.github.io/_pages/Multi_UAV/ex4.gif" alt="" /></th>
+      <th style="text-align: center"><img src="https://alee08.github.io/assets/Multi_UAV/ex3.gif" alt="" /></th>
+      <th style="text-align: center"><img src="https://alee08.github.io/assets/Multi_UAV/ex4.gif" alt="" /></th>
     </tr>
   </thead>
   <tbody>
@@ -297,7 +297,26 @@ The `Z-axis` in the example is set to `0` because it is not considered.
 
 ## License
 
-This project is intended for private use only. All rights are reserved and it is not Open Source or Free. You cannot modify or redistribute this code without explicit permission from the copyright holder. 
+Copyright (c) 2012-2022 Alessandro Trapasso
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---
 
@@ -307,7 +326,7 @@ This project is intended for private use only. All rights are reserved and it is
 - Surname: Trapasso
 - University: Sapienza University of Rome
 - Master degree: [Engieering in Computer Science](https://corsidilaurea.uniroma1.it/it/corso/2020/30430/home)
-- University e-mail: trapasso.1597997@studenti.uniroma1.it
+- University e-mail: trapasso@diag.uniroma1.it
 - Private e-mail ale.trapasso8@gmail.com 
 
 [Back To The Top](#read-me-template)
